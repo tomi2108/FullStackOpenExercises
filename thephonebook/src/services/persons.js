@@ -14,12 +14,12 @@ const create = (newObject) => {
 
 const erase = (id) => {
   const req = axios.delete(`${baseUrl}/${id}`);
-  return req.then((res) => "deleted succesfully");
+  return req.then((res) => res.data);
 };
 
 const update = (id, newObject) => {
   const req = axios.put(`${baseUrl}/${id}`, newObject);
-  return req.then((res) => res.data);
+  return req;
 };
 
 export default { getAll, create, erase, update };

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Display from "./components/Display";
-import axios from "axios";
+import Notification from "./components/Notification";
 import PersonsServices from "./services/persons";
 
 const App = () => {
@@ -11,6 +11,7 @@ const App = () => {
   const [newPhone, setNewPhone] = useState("");
   const [searching, setSearching] = useState("");
   const [searchedArr, setSearchedArr] = useState([]);
+  const [notiObj, setNotiObj] = useState({ message: "", flag: -1 });
 
   useEffect(() => {
     PersonsServices.getAll().then((resp) => {
@@ -42,15 +43,28 @@ const App = () => {
     if (personsNames.includes(nName)) {
       if (window.confirm(`${newName} is already added to the phonebook, replace the old number with a new one?`)) {
         const existingPerson = persons.find((person) => person.name.trim().toLowerCase() === nName);
-        PersonsServices.update(existingPerson.id, { ...personObject, id: existingPerson.id }).then((res) => {
-          setPersons(persons.map((person) => (person.id !== existingPerson.id ? person : res)));
-          setSearchedArr(searchedArr.map((person) => (person.id !== existingPerson.id ? person : res)));
-        });
+        PersonsServices.update(existingPerson.id, { ...personObject, id: existingPerson.id })
+          .then((res) => {
+            setPersons(persons.map((person) => (person.id !== existingPerson.id ? person : res.data)));
+            setSearchedArr(searchedArr.map((person) => (person.id !== existingPerson.id ? person : res.data)));
+            setNotiObj({ message: `${personObject.name}'s phone number updated `, flag: 1 });
+            setTimeout(() => setNotiObj({ message: "", flag: -1 }), 4000);
+          })
+          .catch((err) => {
+            setPersons(persons.filter((person) => person.id !== existingPerson.id));
+            setSearchedArr(searchedArr.filter((person) => person.id !== existingPerson.id));
+            console.log("holaaa");
+            console.log(existingPerson);
+            setNotiObj({ message: `${existingPerson.name} was already deleted from the phonebook`, flag: 0 });
+            setTimeout(() => setNotiObj({ message: "", flag: -1 }), 4000);
+          });
       }
     } else if (newName !== "") {
       PersonsServices.create(personObject).then((res) => {
         setPersons(persons.concat(res));
         setSearchedArr(persons.concat(res));
+        setNotiObj({ message: `${personObject.name}'s phone number added to phonebook `, flag: 1 });
+        setTimeout(() => setNotiObj({ message: "", flag: -1 }), 4000);
       });
     }
     setNewName("");
@@ -63,6 +77,8 @@ const App = () => {
       PersonsServices.erase(id).then((res) => {
         setPersons(persons.filter((person) => person.id !== id));
         setSearchedArr(searchedArr.filter((person) => person.id !== id));
+        setNotiObj({ message: `${persons[id - 1].name}'s phone number deleted from phonebook `, flag: 1 });
+        setTimeout(() => setNotiObj({ message: "", flag: -1 }), 4000);
       });
     }
   };
@@ -70,6 +86,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification notiObj={notiObj} />
       <Filter onChange={searchingChange} searching={searching} />
       <h2>add new person</h2>
       <PersonForm addPerson={addPerson} nameChange={nameChange} phoneChange={phoneChange} newName={newName} newPhone={newPhone} />
