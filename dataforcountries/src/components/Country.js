@@ -1,25 +1,25 @@
 import React from "react";
 import CountryDetails from "./CountryDetails";
+import { Button, Card } from "react-bootstrap";
 
 const Country = ({ details, country, onClick, index }) => {
   if (details) {
     const arr = [country];
     return (
       <>
-        <p>{country.name}</p>{" "}
-        <button onClick={onClick} id={index}>
-          show
-        </button>
         <CountryDetails arr={arr} />
+        <Button variant="success" onClick={onClick} id={index}>
+          Show less
+        </Button>
       </>
     );
   } else {
     return (
       <>
-        <p>{country.name}</p>{" "}
-        <button onClick={onClick} id={index}>
-          show
-        </button>
+        <Card.Title>{country.name}</Card.Title>{" "}
+        <Button variant="success" onClick={onClick} id={index}>
+          Show more
+        </Button>
       </>
     );
   }

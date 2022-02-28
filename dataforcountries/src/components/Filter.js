@@ -1,10 +1,14 @@
 import React from "react";
+import { Form } from "react-bootstrap";
 
 const Filter = ({ onChange, searching }) => {
   return (
-    <div>
-      Search: <input onChange={onChange} value={searching} type="text" />
-    </div>
+    <Form>
+      <Form.Group>
+        <Form.Label column>Search:</Form.Label>
+        <Form.Control placeholder="Enter filter" onChange={onChange} value={searching} type="text" />
+      </Form.Group>
+    </Form>
   );
 };
 
