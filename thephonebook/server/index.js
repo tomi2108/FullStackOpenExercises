@@ -1,6 +1,12 @@
 const express = require("express");
+var morgan = require("morgan");
 const app = express();
 
+const configureMorgan = (tokens, req, res) => {
+  return [tokens.method(req, res), tokens.url(req, res), tokens.status(req, res), tokens.res(req, res, "content-length"), "-", tokens["response-time"](req, res), "ms", JSON.stringify(req.body)].join(" ");
+};
+
+app.use(morgan(configureMorgan));
 app.use(express.json());
 
 const PORT = 3001;
@@ -68,6 +74,11 @@ app.post("/api/persons/", (req, res) => {
   persons = persons.concat(newPerson);
   res.json(newPerson);
 });
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: "unknown endpoint" });
+};
+app.use(unknownEndpoint);
 
 app.listen(PORT);
 console.log(`Server running on port ${PORT}`);
