@@ -1,15 +1,18 @@
 const express = require("express");
 var morgan = require("morgan");
+const cors = require("cors");
 const app = express();
+
+const PORT = process.env.PORT || 3001;
 
 const configureMorgan = (tokens, req, res) => {
   return [tokens.method(req, res), tokens.url(req, res), tokens.status(req, res), tokens.res(req, res, "content-length"), "-", tokens["response-time"](req, res), "ms", JSON.stringify(req.body)].join(" ");
 };
 
+app.use(express.static("build"));
 app.use(morgan(configureMorgan));
 app.use(express.json());
-
-const PORT = 3001;
+app.use(cors());
 
 let persons = [
   {

@@ -47,12 +47,6 @@ let notes = [
     id: 7,
   },
   {
-    content: "testiiiiiiiiiiiiiiiiiign",
-    date: "2022-02-19T21:59:03.179Z",
-    important: false,
-    id: 8,
-  },
-  {
     content: "testing",
     date: "2022-02-19T21:59:06.452Z",
     important: false,
@@ -95,6 +89,8 @@ let notes = [
     id: 15,
   },
 ];
+
+app.use(express.static("build"));
 app.use(express.json());
 app.use(cors());
 
