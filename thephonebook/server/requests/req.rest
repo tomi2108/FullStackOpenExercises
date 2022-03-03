@@ -12,3 +12,18 @@ content-type: application/json
 }
 ###
 DELETE https://shrouded-escarpment-43675.herokuapp.com/api/persons/1621
+### LOCALHOST
+GET http://localhost:3001/api/persons
+###
+GET http://localhost:3001/api/persons/621fbbfc6837267ed6d60673
+###
+POST http://localhost:3001/api/persons/ HTTP/1.1
+content-type: application/json
+
+{
+  "name": "Artodsddsadadsa Hellas",
+  "number": "djsakdsa"
+
+}
+###
+DELETE http://localhost:3001/api/persons/62203bbc19a18e13db918149
