@@ -39,11 +39,11 @@ const App = () => {
     e.preventDefault();
     const nName = newName.trim().toLowerCase();
     const personsNames = persons.map((person) => person.name.trim().toLowerCase());
-    const personObject = { name: newName, number: newPhone, id: persons.length + 1 };
+    const existingPerson = persons.find((person) => person.name.trim().toLowerCase() === nName);
+    const personObject = { name: newName, number: existingPerson.number, id: existingPerson.id };
     if (personsNames.includes(nName)) {
       if (window.confirm(`${newName} is already added to the phonebook, replace the old number with a new one?`)) {
-        const existingPerson = persons.find((person) => person.name.trim().toLowerCase() === nName);
-        PersonsServices.update(existingPerson.id, { ...personObject, id: existingPerson.id })
+        PersonsServices.update(existingPerson.id, personObject)
           .then((res) => {
             setPersons(persons.map((person) => (person.id !== existingPerson.id ? person : res.data)));
             setSearchedArr(searchedArr.map((person) => (person.id !== existingPerson.id ? person : res.data)));
@@ -53,8 +53,6 @@ const App = () => {
           .catch((err) => {
             setPersons(persons.filter((person) => person.id !== existingPerson.id));
             setSearchedArr(searchedArr.filter((person) => person.id !== existingPerson.id));
-            console.log("holaaa");
-            console.log(existingPerson);
             setNotiObj({ message: `${existingPerson.name} was already deleted from the phonebook`, flag: 0 });
             setTimeout(() => setNotiObj({ message: "", flag: -1 }), 4000);
           });
@@ -73,7 +71,8 @@ const App = () => {
   };
 
   const handleDelete = (id) => {
-    if (window.confirm(`Are you sure you want to delete ${persons[id - 1].name}?`)) {
+    const person = persons.find((person) => person.id === id);
+    if (window.confirm(`Are you sure you want to delete ${person.name}?`)) {
       PersonsServices.erase(id).then((res) => {
         setPersons(persons.filter((person) => person.id !== id));
         setSearchedArr(searchedArr.filter((person) => person.id !== id));

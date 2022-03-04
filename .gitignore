@@ -1,2 +1,5 @@
-notes/server/.env
-thephonebook/server/.env
+.env
+.gitignore
+*.rest
+requests/
+/node_modules

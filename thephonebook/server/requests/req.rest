@@ -15,9 +15,11 @@ DELETE https://shrouded-escarpment-43675.herokuapp.com/api/persons/1621
 ### LOCALHOST
 GET http://localhost:3001/api/persons
 ###
+GET http://localhost:3001/info
+###
 GET http://localhost:3001/api/persons/621fbbfc6837267ed6d60673
 ###
-POST http://localhost:3001/api/persons/ HTTP/1.1
+POST  HTTP/1.1
 content-type: application/json
 
 {
@@ -27,3 +29,12 @@ content-type: application/json
 }
 ###
 DELETE http://localhost:3001/api/persons/62203bbc19a18e13db918149
+
+###
+PUT http://localhost:3001/api/persons/621fbbfc6837267ed6d60673
+content-type: application/json
+
+{
+  "name": "THIS WAS MADE BY PUT",
+  "number": "3333333333333"
+}
