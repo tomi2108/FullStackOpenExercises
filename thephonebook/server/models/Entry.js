@@ -11,8 +11,8 @@ mongoose
   .catch((err) => console.log("Error connecting to MongoDb:", err));
 
 const entrySchema = new mongoose.Schema({
-  name: String,
-  number: String,
+  name: { type: String, required: true, minlength: 3 },
+  number: { type: String, required: true, minlength: 8, validate: { validator: (v) => /^\d\d\d?-\d*$/.test(v) } },
 });
 entrySchema.set("toJSON", {
   transform: (document, returnedObject) => {

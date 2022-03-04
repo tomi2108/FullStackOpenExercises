@@ -8,7 +8,7 @@ import PersonsServices from "./services/persons";
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
-  const [newPhone, setNewPhone] = useState("");
+  const [newNumber, setnewNumber] = useState("");
   const [searching, setSearching] = useState("");
   const [searchedArr, setSearchedArr] = useState([]);
   const [notiObj, setNotiObj] = useState({ message: "", flag: -1 });
@@ -24,7 +24,7 @@ const App = () => {
     setNewName(e.target.value);
   };
   const phoneChange = (e) => {
-    setNewPhone(e.target.value);
+    setnewNumber(e.target.value);
   };
 
   const searchingChange = (e) => {
@@ -37,11 +37,9 @@ const App = () => {
 
   const addPerson = (e) => {
     e.preventDefault();
-    const nName = newName.trim().toLowerCase();
-    const personsNames = persons.map((person) => person.name.trim().toLowerCase());
-    const existingPerson = persons.find((person) => person.name.trim().toLowerCase() === nName);
-    const personObject = { name: newName, number: existingPerson.number, id: existingPerson.id };
-    if (personsNames.includes(nName)) {
+    const existingPerson = persons.find((person) => person.name.trim().toLowerCase() === newName.trim().toLowerCase());
+    if (existingPerson) {
+      const personObject = { name: newName, number: newNumber, id: existingPerson.id };
       if (window.confirm(`${newName} is already added to the phonebook, replace the old number with a new one?`)) {
         PersonsServices.update(existingPerson.id, personObject)
           .then((res) => {
@@ -56,17 +54,25 @@ const App = () => {
             setNotiObj({ message: `${existingPerson.name} was already deleted from the phonebook`, flag: 0 });
             setTimeout(() => setNotiObj({ message: "", flag: -1 }), 4000);
           });
-      }
-    } else if (newName !== "") {
-      PersonsServices.create(personObject).then((res) => {
-        setPersons(persons.concat(res));
-        setSearchedArr(persons.concat(res));
-        setNotiObj({ message: `${personObject.name}'s phone number added to phonebook `, flag: 1 });
-        setTimeout(() => setNotiObj({ message: "", flag: -1 }), 4000);
-      });
+      } else return;
+    } else {
+      const personObject = { name: newName, number: newNumber };
+      PersonsServices.create(personObject)
+        .then((res) => {
+          setPersons(persons.concat(res));
+          setSearchedArr(persons.concat(res));
+          setNotiObj({ message: `${personObject.name}'s phone number added to phonebook `, flag: 1 });
+          setTimeout(() => setNotiObj({ message: "", flag: -1 }), 4000);
+        })
+        .catch((err) => {
+          if (newName.length < 3 && newName !== "") {
+            setNotiObj({ message: `Person validation error: Name must be at least three (3) characters long`, flag: 0 });
+          } else if (!(newName && newNumber)) setNotiObj({ message: `Person validation eror: Name or number missing`, flag: 0 });
+          setTimeout(() => setNotiObj({ message: "", flag: -1 }), 4000);
+        });
     }
     setNewName("");
-    setNewPhone("");
+    setnewNumber("");
     setSearching("");
   };
 
@@ -76,7 +82,7 @@ const App = () => {
       PersonsServices.erase(id).then((res) => {
         setPersons(persons.filter((person) => person.id !== id));
         setSearchedArr(searchedArr.filter((person) => person.id !== id));
-        setNotiObj({ message: `${persons[id - 1].name}'s phone number deleted from phonebook `, flag: 1 });
+        setNotiObj({ message: `${person.name}'s phone number deleted from phonebook `, flag: 1 });
         setTimeout(() => setNotiObj({ message: "", flag: -1 }), 4000);
       });
     }
@@ -87,8 +93,10 @@ const App = () => {
       <h2>Phonebook</h2>
       <Notification notiObj={notiObj} />
       <Filter onChange={searchingChange} searching={searching} />
-      <h2>add new person</h2>
-      <PersonForm addPerson={addPerson} nameChange={nameChange} phoneChange={phoneChange} newName={newName} newPhone={newPhone} />
+      <h2>Add new person</h2>
+      <p>Persons name must be at least 3 characters long</p>
+      <p>Number must be at least 8 characters long and be of type "xxx-xxxxxx"</p>
+      <PersonForm addPerson={addPerson} nameChange={nameChange} phoneChange={phoneChange} newName={newName} newPhone={newNumber} />
       <h2>Numbers</h2>
       <Display handleDelete={handleDelete} state={searchedArr} />
     </div>

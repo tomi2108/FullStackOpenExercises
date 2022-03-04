@@ -10,8 +10,8 @@ mongoose
   .catch((err) => console.log("error connecting to MongoDB:", err));
 
 const noteSchema = new mongoose.Schema({
-  content: String,
-  date: Date,
+  content: { type: String, required: true },
+  date: { type: Date, required: true },
   important: Boolean,
 });
 noteSchema.set("toJSON", {
