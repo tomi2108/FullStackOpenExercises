@@ -66,7 +66,7 @@ app.post("/api/persons/", (req, res, next) => {
       newPerson
         .save()
         .then((savedPerson) => res.json(savedPerson))
-        .catch((err) => errorHandler({ name: "unmatchedStringError" }, req, res, next));
+        .catch(() => errorHandler({ name: "unmatchedStringError" }, req, res, next));
     } else {
       errorHandler({ name: "postError" }, req, res, next);
     }
