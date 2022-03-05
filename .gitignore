@@ -2,4 +2,4 @@
 .gitignore
 *.rest
 requests/
-/node_modules
+*/node_modules
