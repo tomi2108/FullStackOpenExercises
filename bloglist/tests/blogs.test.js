@@ -55,6 +55,31 @@ describe("blogsDb", () => {
     const newBlog3 = { url: "hii", likes: 7, author: "tomi" };
     await api.post("/api/blogs").send(newBlog3).expect(400);
   });
+  test("blog is deleted", async () => {
+    const blogsAtStart = await helper.blogsInDb();
+    const blogToDelete = blogsAtStart[0];
+
+    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+
+    const blogsAtEnd = await helper.blogsInDb();
+    expect(blogsAtEnd).toHaveLength(initialBlogs.length - 1);
+
+    const blogTitles = blogsAtEnd.map((b) => b.title);
+    expect(blogTitles).not.toContain(blogToDelete.title);
+  });
+  test("blog is updated", async () => {
+    const blogsAtStart = await helper.blogsInDb();
+    const blogToUpdate = blogsAtStart[0];
+    const idToUpdate = blogToUpdate.id;
+    const newBlog = { author: "tomi", likes: 5, title: "updatedBlog", url: "updateddd" };
+
+    await api.put(`/api/blogs/${idToUpdate}`).send(newBlog);
+    const blogsAtEnd = await helper.blogsInDb();
+
+    expect(blogsAtEnd).toHaveLength(initialBlogs.length);
+    expect(blogsAtEnd).toContainEqual({ id: idToUpdate, ...newBlog });
+    expect(blogsAtEnd).not.toContainEqual(blogToUpdate);
+  });
 });
 
 afterAll(() => {
