@@ -3,6 +3,7 @@ const noteSchema = new mongoose.Schema({
   content: { type: String, required: true },
   date: { type: Date, required: true },
   important: Boolean,
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 });
 noteSchema.set("toJSON", {
   transform: (document, returnedObject) => {
