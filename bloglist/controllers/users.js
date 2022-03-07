@@ -1,12 +1,13 @@
+const express = require("express");
 const bcrypt = require("bcrypt");
-const usersRouter = require("express").Router();
 const User = require("../models/User");
+const userRouter = express.Router();
 
-usersRouter.post("/", async (request, response) => {
+userRouter.post("/", async (request, response) => {
   const { username, name, password } = request.body;
+  if (!(username && password && username.length > 3 && password.length > 3)) return response.status(400).json({ error: "username and password do not meet requirements" });
 
   const existingUser = await User.findOne({ username: username });
-
   if (existingUser) return response.status(400).json({ error: "username must be unique" });
 
   const saltRounds = 10;
@@ -22,9 +23,9 @@ usersRouter.post("/", async (request, response) => {
   response.status(201).json(savedUser);
 });
 
-usersRouter.get("/", async (request, response) => {
-  const users = await User.find({}).populate("notes", { content: 1, date: 1, important: 1 });
+userRouter.get("/", async (request, response) => {
+  const users = await User.find({}).populate("blogs", { title: 1, likes: 1 });
   response.json(users);
 });
 
-module.exports = usersRouter;
+module.exports = userRouter;

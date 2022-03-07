@@ -43,11 +43,6 @@ const setInitialNotes = async () => {
   await rootUser.save();
 };
 
-const getInitialNotes = async () => {
-  const notes = await Note.find({ content: "initial" });
-  return notes;
-};
-
 const nonExistingId = async () => {
   const note = new Note({ content: "willremovethissoon", date: new Date() });
   await note.save();
@@ -71,7 +66,6 @@ module.exports = {
   setRootUser,
   setInitialNotes,
   getRootUser,
-  getInitialNotes,
   nonExistingId,
   notesInDb,
   usersInDb,
