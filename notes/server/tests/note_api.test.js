@@ -1,25 +1,17 @@
 const mongoose = require("mongoose");
-const supertest = require("supertest");
-const app = require("../app");
-const api = supertest(app);
-const bcrypt = require("bcrypt");
-const Note = require("../models/note");
-const User = require("../models/user");
+const Note = require("../models/Note");
+const User = require("../models/User");
 const helper = require("./test_helper");
 
-const initialNotes = helper.initialNotes;
+const api = helper.api;
 
 beforeEach(async () => {
-  await Note.deleteMany({});
-  const notesObjects = initialNotes.map((note) => new Note(note));
-  const promiseArray = notesObjects.map((obj) => obj.save());
-  await Promise.all(promiseArray);
-
   await User.deleteMany({});
-  const passwordHash = await bcrypt.hash("sekret", 10);
-  const user = new User({ username: "root", passwordHash });
-  await user.save();
+  await helper.setRootUser();
+  await Note.deleteMany({});
+  await helper.setInitialNotes();
 });
+
 describe("notes", () => {
   describe("when there is initially some notes saved", () => {
     test("notes are returned as json", async () => {
@@ -31,8 +23,9 @@ describe("notes", () => {
 
     test("all notes are returned", async () => {
       const response = await api.get("/api/notes");
+      const notesAtStart = await helper.notesInDb();
 
-      expect(response.body).toHaveLength(initialNotes.length);
+      expect(response.body).toHaveLength(notesAtStart.length);
     });
 
     test("a specific note is within the returned notes", async () => {
@@ -40,7 +33,7 @@ describe("notes", () => {
 
       const contents = response.body.map((r) => r.content);
 
-      expect(contents).toContain("Browser can execute only Javascript");
+      expect(contents).toContain("initial_1");
     });
   });
 
@@ -49,15 +42,14 @@ describe("notes", () => {
       const notesAtStart = await helper.notesInDb();
 
       const noteToView = notesAtStart[0];
+      const processedNoteToView = JSON.parse(JSON.stringify(noteToView));
 
-      const resultNote = await api
+      const result = await api
         .get(`/api/notes/${noteToView.id}`)
         .expect(200)
         .expect("Content-Type", /application\/json/);
 
-      const processedNoteToView = JSON.parse(JSON.stringify(noteToView));
-
-      expect(resultNote.body).toEqual(processedNoteToView);
+      expect(result.body).toEqual(processedNoteToView);
     });
 
     test("fails with statuscode 404 if note does not exist", async () => {
@@ -75,38 +67,54 @@ describe("notes", () => {
 
   describe("addition of a new note", () => {
     test("succeeds with valid data", async () => {
-      const user = await User.find({ username: "root" });
+      const rootUser = await helper.getRootUser();
+      const notesAtStart = await helper.notesInDb();
+
+      const loginUser = { username: "root", password: "secretPassword" };
+      const login = await api.post("/api/login").send(loginUser);
+      const token = login.body.token;
+
       const newNote = {
         content: "async/await simplifies making async calls",
-        userId: user[0]._id,
+        user: rootUser._id,
         important: true,
       };
-
       await api
         .post("/api/notes")
+        .set({ Authorization: `bearer ${token}` })
         .send(newNote)
         .expect(201)
         .expect("Content-Type", /application\/json/);
 
       const notesAtEnd = await helper.notesInDb();
-      expect(notesAtEnd).toHaveLength(initialNotes.length + 1);
+      expect(notesAtEnd).toHaveLength(notesAtStart.length + 1);
 
       const contents = notesAtEnd.map((n) => n.content);
       expect(contents).toContain("async/await simplifies making async calls");
     });
 
     test("fails with status code 400 if data invaild", async () => {
-      const user = await User.find({ username: "root" });
+      const rootUser = await helper.getRootUser();
+      const notesAtStart = await helper.notesInDb();
+
+      const loginUser = { username: "root", password: "secretPassword" };
+      const login = await api.post("/api/login").send(loginUser);
+      const token = login.body.token;
+
       const newNote = {
-        userId: user[0]._id,
+        user: rootUser._id,
         important: true,
       };
 
-      await api.post("/api/notes").send(newNote).expect(400);
+      await api
+        .post("/api/notes")
+        .set({ Authorization: `bearer ${token}` })
+        .send(newNote)
+        .expect(400);
 
       const notesAtEnd = await helper.notesInDb();
 
-      expect(notesAtEnd).toHaveLength(initialNotes.length);
+      expect(notesAtEnd).toHaveLength(notesAtStart.length);
     });
   });
 
@@ -119,7 +127,7 @@ describe("notes", () => {
 
       const notesAtEnd = await helper.notesInDb();
 
-      expect(notesAtEnd).toHaveLength(initialNotes.length - 1);
+      expect(notesAtEnd).toHaveLength(notesAtStart.length - 1);
 
       const contents = notesAtEnd.map((r) => r.content);
 
@@ -127,6 +135,7 @@ describe("notes", () => {
     });
   });
 });
+
 describe("users", () => {
   describe("when there is initially one user in db", () => {
     test("creation succeeds with a fresh username", async () => {
@@ -136,6 +145,7 @@ describe("users", () => {
         username: "mluukkai",
         name: "Matti Luukkainen",
         password: "salainen",
+        notes: [],
       };
 
       await api
@@ -158,6 +168,7 @@ describe("users", () => {
         username: "root",
         name: "Superuser",
         password: "salainen",
+        notes: [],
       };
 
       const result = await api

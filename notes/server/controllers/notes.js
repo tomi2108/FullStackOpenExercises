@@ -1,27 +1,30 @@
-const express = require("express");
-const notesRouter = express.Router();
-const Note = require("../models/note");
-const User = require("../models/user");
+const notesRouter = require("express").Router();
+
+const { hasValidToken } = require("../utils/middleware");
+
+const Note = require("../models/Note");
+const User = require("../models/User");
 
 notesRouter.get("/", async (request, response) => {
-  const results = await Note.find({}).populate("userId", { username: 1, name: 1 });
+  const results = await Note.find({}).populate("user", { username: 1, name: 1 });
   response.json(results);
 });
 
 notesRouter.get("/:id", async (req, res) => {
-  const note = await Note.findById(req.params.id).populate("userId", { username: 1, name: 1 });
+  const note = await Note.findById(req.params.id);
   note ? res.json(note) : res.status(404).end();
 });
 
 notesRouter.post("/", async (req, res) => {
   const body = req.body;
+  const decodedToken = hasValidToken(req);
 
-  const user = await User.findById(body.userId);
+  const user = await User.findById(decodedToken.id);
   const note = new Note({
     content: body.content,
     important: body.important || false,
     date: new Date(),
-    userId: user._id,
+    user: user._id,
   });
 
   const savedNote = await note.save();

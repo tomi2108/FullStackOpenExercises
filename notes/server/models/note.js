@@ -3,7 +3,7 @@ const noteSchema = new mongoose.Schema({
   content: { type: String, required: true },
   date: { type: Date, required: true },
   important: Boolean,
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 });
 noteSchema.set("toJSON", {
   transform: (document, returnedObject) => {
@@ -12,4 +12,4 @@ noteSchema.set("toJSON", {
     delete returnedObject.__v;
   },
 });
-module.exports = mongoose.model("Notes", noteSchema);
+module.exports = mongoose.model("Note", noteSchema);
