@@ -26,10 +26,16 @@ describe("blogsDb", () => {
 
   test("blog is posted correctly", async () => {
     const rootUser = await helper.getRootUser();
-    const newBlog = { title: "addedBlog", url: "smth", author: rootUser._id };
+    const loginUser = { username: "root", password: "secretPassword" };
+    const login = await api.post("/api/login").send(loginUser);
+
+    const token = login.body.token;
+
+    const newBlog = { title: "addedBlog", url: "smth" };
     const blogsAtStart = await helper.blogsInDb();
     await api
       .post("/api/blogs")
+      .set({ Authorization: `bearer ${token}` })
       .send(newBlog)
       .expect(201)
       .expect("Content-Type", /application\/json/);
@@ -39,9 +45,31 @@ describe("blogsDb", () => {
     expect(blogTitles).toContain("addedBlog");
   });
 
+  test("blog is not posted without token and gives 401", async () => {
+    const newBlog = { title: "addedBlog", url: "smth" };
+    const blogsAtStart = await helper.blogsInDb();
+
+    await api.post("/api/blogs").send(newBlog).expect(401);
+
+    const blogsAtEnd = await helper.blogsInDb();
+
+    expect(blogsAtEnd).toHaveLength(blogsAtStart.length);
+
+    const blogTitles = blogsAtEnd.map((b) => b.title);
+    expect(blogTitles).not.toContain("addedBlog");
+  });
+
   test("if likes are not added it will default to 0", async () => {
+    const loginUser = { username: "root", password: "secretPassword" };
+    const login = await api.post("/api/login").send(loginUser);
+
+    const token = login.body.token;
+
     const newBlog = { title: "likesBlog", url: "smth" };
-    await api.post("/api/blogs").send(newBlog);
+    await api
+      .post("/api/blogs")
+      .set({ Authorization: `bearer ${token}` })
+      .send(newBlog);
 
     const blogsAtEnd = await helper.blogsInDb();
     const postedBlog = blogsAtEnd.find((b) => b.title === "likesBlog");
@@ -49,20 +77,48 @@ describe("blogsDb", () => {
   });
 
   test("if title or url are not defined respond with 400 Bad request", async () => {
-    const newBlog = { likes: 7, author: "tomi" };
-    await api.post("/api/blogs").send(newBlog).expect(400);
-    const newBlog2 = { title: "Hello", likes: 7, author: "tomi" };
-    await api.post("/api/blogs").send(newBlog2).expect(400);
-    const newBlog3 = { url: "hii", likes: 7, author: "tomi" };
-    await api.post("/api/blogs").send(newBlog3).expect(400);
+    const rootUser = await helper.getRootUser();
+    const loginUser = { username: "root", password: "secretPassword" };
+    const login = await api.post("/api/login").send(loginUser);
+
+    const token = login.body.token;
+
+    const newBlog = { likes: 7, author: rootUser._id };
+    await api
+      .post("/api/blogs")
+      .set({ Authorization: `bearer ${token}` })
+      .send(newBlog)
+      .expect(400);
+    const newBlog2 = { title: "Hello", likes: 7, author: rootUser._id };
+    await api
+      .post("/api/blogs")
+      .set({ Authorization: `bearer ${token}` })
+      .send(newBlog2)
+      .expect(400);
+    const newBlog3 = { url: "hii", likes: 7, author: rootUser._id };
+    await api
+      .post("/api/blogs")
+      .set({ Authorization: `bearer ${token}` })
+      .send(newBlog3)
+      .expect(400);
   });
   test("blog is deleted", async () => {
-    const blogsAtStart = await helper.blogsInDb();
+    const rootUser = await helper.getRootUser();
+    const loginUser = { username: "root", password: "secretPassword" };
+    const login = await api.post("/api/login").send(loginUser);
+
+    const token = login.body.token;
+
+    const blogsAtStart = await Blog.find({ author: rootUser._id });
+
     const blogToDelete = blogsAtStart[0];
 
-    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .set({ Authorization: `bearer ${token}` })
+      .expect(204);
 
-    const blogsAtEnd = await helper.blogsInDb();
+    const blogsAtEnd = await Blog.find({ author: rootUser._id });
     expect(blogsAtEnd).toHaveLength(blogsAtStart.length - 1);
 
     const blogTitles = blogsAtEnd.map((b) => b.title);
