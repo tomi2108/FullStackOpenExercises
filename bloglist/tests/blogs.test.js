@@ -65,7 +65,7 @@ describe("blogsDb", () => {
 
     const token = login.body.token;
 
-    const newBlog = { title: "likesBlog", url: "smth" };
+    const newBlog = { title: "likesBlog", url: "smthng" };
     await api
       .post("/api/blogs")
       .set({ Authorization: `bearer ${token}` })
