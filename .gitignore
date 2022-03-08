@@ -1,5 +1,4 @@
 .env
-.gitignore
 .rest
-requests/
-*/node_modules
+**/requests
+**/node_modules
