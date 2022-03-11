@@ -5,13 +5,6 @@ import { Button } from "react-bootstrap";
 const Togglable = forwardRef(({ closeLabel, openLabel, children }, ref) => {
   const [visible, setVisible] = useState(false);
 
-  Togglable.displayName = "Togglable";
-
-  Togglable.propTypes = {
-    closeLabel: PropTypes.string.isRequired,
-    openLabel: PropTypes.string.isRequired,
-  };
-
   const toggleVisibility = () => {
     setVisible(!visible);
   };
@@ -33,5 +26,12 @@ const Togglable = forwardRef(({ closeLabel, openLabel, children }, ref) => {
     </Button>
   );
 });
+
+Togglable.displayName = "Togglable";
+
+Togglable.propTypes = {
+  closeLabel: PropTypes.string.isRequired,
+  openLabel: PropTypes.string.isRequired,
+};
 
 export default Togglable;

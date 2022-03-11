@@ -5,12 +5,8 @@ import { Button } from "react-bootstrap";
 const Togglable = forwardRef(({ buttonClose, buttonOpen, children }, ref) => {
   const [visible, setVisible] = useState(false);
 
-  Togglable.displayName = "Togglable";
-
-  Togglable.propTypes = {
-    buttonOpen: PropTypes.string.isRequired,
-    buttonClose: PropTypes.string.isRequired,
-  };
+  const hideWhenVisible = { display: visible ? "none" : "" };
+  const showWhenVisible = { display: visible ? "" : "none" };
 
   const toggleVisibility = () => {
     setVisible(!visible);
@@ -20,18 +16,27 @@ const Togglable = forwardRef(({ buttonClose, buttonOpen, children }, ref) => {
     return { toggleVisibility };
   });
 
-  return visible ? (
+  return (
     <>
-      <Button variant="outline-danger" onClick={toggleVisibility}>
-        {buttonClose}
-      </Button>
-      {children}
+      <div className="togglableContent" style={showWhenVisible}>
+        <Button variant="outline-danger" onClick={toggleVisibility}>
+          {buttonClose}
+        </Button>
+        <div>{children}</div>
+      </div>
+      <div style={hideWhenVisible}>
+        <Button variant="outline-info" onClick={toggleVisibility}>
+          {buttonOpen}
+        </Button>
+      </div>
     </>
-  ) : (
-    <Button variant="outline-info" onClick={toggleVisibility}>
-      {buttonOpen}
-    </Button>
   );
 });
+Togglable.displayName = "Togglable";
+
+Togglable.propTypes = {
+  buttonOpen: PropTypes.string.isRequired,
+  buttonClose: PropTypes.string.isRequired,
+};
 
 export default Togglable;

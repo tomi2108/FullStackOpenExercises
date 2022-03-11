@@ -17,7 +17,7 @@ const SaveNoteForm = ({ addNote }) => {
 
   return (
     <Form onSubmit={createNote}>
-      <Form.Control onChange={(e) => setNewNote(e.target.value)} type="text" value={newNote} />
+      <Form.Control placeholder="Write a new note..." onChange={(e) => setNewNote(e.target.value)} type="text" value={newNote} />
       <br />
       <Button variant="success" type="submit">
         Save

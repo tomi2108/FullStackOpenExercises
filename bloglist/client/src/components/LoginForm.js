@@ -6,10 +6,6 @@ const LoginForm = ({ handleLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  LoginForm.propTypes = {
-    handleLogin: PropTypes.func.isRequired,
-  };
-
   return (
     <form
       onSubmit={(e) => {
@@ -35,6 +31,10 @@ const LoginForm = ({ handleLogin }) => {
       </Button>{" "}
     </form>
   );
+};
+
+LoginForm.propTypes = {
+  handleLogin: PropTypes.func.isRequired,
 };
 
 export default LoginForm;

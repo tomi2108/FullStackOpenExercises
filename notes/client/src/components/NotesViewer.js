@@ -27,11 +27,7 @@ const NotesViewer = ({ notes, updateNote }) => {
       <Table striped>
         <tbody>
           {notesToShow.map((note) => {
-            return (
-              <tr key={note.id}>
-                <Note key={note.id} note={note} toggleImportance={() => toggleImportanceOF(note.id)} />
-              </tr>
-            );
+            return <Note key={note.id} note={note} toggleImportance={() => toggleImportanceOF(note.id)} />;
           })}
         </tbody>
       </Table>
