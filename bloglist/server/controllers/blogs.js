@@ -25,23 +25,12 @@ blogRouter.post("/", tokenExtractor, async (request, response) => {
 
 blogRouter.delete("/:id", tokenExtractor, async (request, response) => {
   const idToDelete = request.params.id;
-  const blogToDelete = await Blog.findById(idToDelete);
-  const userOfBlog = await User.findById(blogToDelete.author);
-  const userOfBlogId = userOfBlog._id;
-  console.log(userOfBlogId, "user of blog");
 
   const decodedToken = request.token;
 
-  const userOfToken = await User.findById(decodedToken.id);
-  const userOfTokenId = userOfToken._id;
-
-  if (userOfTokenId.toString() === userOfBlogId.toString()) {
+  if (decodedToken.id) {
     await Blog.findByIdAndRemove(idToDelete);
-    userOfBlog.blogs = userOfBlog.blogs.filter((objId) => objId.toString() !== idToDelete);
-    await userOfBlog.save();
     return response.status(204).end();
-  } else {
-    return response.status(401).send({ error: "cant remove a blog from another user" });
   }
 });
 

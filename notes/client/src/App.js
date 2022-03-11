@@ -1,5 +1,5 @@
 import "./main.css";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Button } from "react-bootstrap";
 import noteService from "./services/notes";
 import loginService from "./services/login";
@@ -8,11 +8,14 @@ import Footer from "./components/Footer";
 import LoginForm from "./components/LoginForm";
 import SaveNoteForm from "./components/SaveNoteForm";
 import NotesViewer from "./components/NotesViewer";
+import Togglable from "./components/Togglable";
 
 const App = () => {
   const [notes, setNotes] = useState([]);
   const [errorMessage, setErrorMessage] = useState(null);
   const [user, setUser] = useState(null);
+
+  const noteFormRef = useRef();
 
   useEffect(() => {
     noteService.getAll().then((resp) => {
@@ -61,6 +64,7 @@ const App = () => {
   };
 
   const addNote = (noteObj) => {
+    noteFormRef.current.toggleVisibility();
     const token = user.token;
     noteService.create(noteObj, token).then((resp) => {
       setNotes(notes.concat(resp));
@@ -73,7 +77,7 @@ const App = () => {
       .then((resp) => {
         setNotes(notes.map((note) => (note.id !== noteObj.id ? note : resp)));
       })
-      .catch((error) => {
+      .catch(() => {
         setErrorMessage(`Note "${noteObj.content}" was already removed from server`);
         setTimeout(() => {
           setErrorMessage(null);
@@ -82,28 +86,41 @@ const App = () => {
       });
   };
 
-  return (
-    <div className="container">
-      <h1>Notes</h1>
-      <Notification message={errorMessage} />
-      {user === null && <LoginForm handleLogin={handleLogIn} />}
-      {user !== null && (
-        <>
-          <div>
-            <p>{user.name} logged-in</p>
-          </div>
-          <div>
-            <Button size="sm" variant="danger" onClick={handleLogOut}>
-              Logout
-            </Button>
-          </div>
-        </>
-      )}
-      {user !== null && <NotesViewer notes={notes} updateNote={updateNote} />}
-      {user !== null && <SaveNoteForm addNote={addNote} />}
-      <Footer />
-    </div>
-  );
+  if (user === null) {
+    return (
+      <div className="container">
+        <h1>Notes</h1>
+        <Notification message={errorMessage} />
+        <Togglable buttonClose="cancel" buttonOpen="Show login">
+          <LoginForm handleLogin={handleLogIn} />
+        </Togglable>
+
+        <Footer />
+      </div>
+    );
+  } else {
+    return (
+      <div className="container">
+        <h1>Notes</h1>
+        <Notification message={errorMessage} />
+
+        <div>
+          <p>{user.name} logged-in</p>
+        </div>
+        <div>
+          <Button size="sm" variant="danger" onClick={handleLogOut}>
+            Logout
+          </Button>
+        </div>
+
+        <NotesViewer notes={notes} updateNote={updateNote} />
+        <Togglable buttonClose="cancel" buttonOpen="Add note" ref={noteFormRef}>
+          <SaveNoteForm addNote={addNote} />
+        </Togglable>
+        <Footer />
+      </div>
+    );
+  }
 };
 
 export default App;

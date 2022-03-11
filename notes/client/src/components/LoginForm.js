@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
+import PropTypes from "prop-types";
 
 const LoginForm = ({ handleLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  LoginForm.propTypes = {
+    handleLogin: PropTypes.func.isRequired,
+  };
   return (
     <form
       onSubmit={(e) => {

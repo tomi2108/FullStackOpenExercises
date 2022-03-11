@@ -1,9 +1,14 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import Button from "react-bootstrap/Button";
 
 const LoginForm = ({ handleLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  LoginForm.propTypes = {
+    handleLogin: PropTypes.func.isRequired,
+  };
 
   return (
     <form

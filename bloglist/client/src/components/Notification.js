@@ -1,5 +1,4 @@
 import { Alert } from "react-bootstrap";
-import { useState } from "react";
 
 const Notification = ({ message, variant }) => {
   if (message === null || variant === null) {

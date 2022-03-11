@@ -20,5 +20,24 @@ const create = (newObject) => {
   return req.then((res) => res.data);
 };
 
-const toExport = { getAll, create, setToken };
+const update = (newObject) => {
+  const config = {
+    headers: {
+      Authorization: token,
+    },
+  };
+  const req = axios.put(`${baseUrl}/${newObject.id}`, newObject, config);
+  return req.then((res) => res.data);
+};
+
+const erase = (obj) => {
+  const config = {
+    headers: {
+      Authorization: token,
+    },
+  };
+  const req = axios.delete(`${baseUrl}/${obj.id}`, config);
+  return req.then((res) => res.data);
+};
+const toExport = { getAll, create, update, erase, setToken };
 export default toExport;

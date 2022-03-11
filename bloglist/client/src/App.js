@@ -1,15 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import blogService from "./services/blogs";
+import loginService from "./services/login";
 import Blog from "./components/Blog";
 import SaveBlogForm from "./components/SaveBlogForm";
-import blogService from "./services/blogs";
 import LoginForm from "./components/LoginForm";
-import loginService from "./services/login";
 import Notification from "./components/Notification";
+import Togglable from "./components/Togglable";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
   const [notification, setNotification] = useState({ message: null, variant: null });
+
+  const blogFormRef = useRef();
 
   useEffect(() => {
     const userJson = window.localStorage.getItem("loggedNoteAppUser");
@@ -44,6 +47,7 @@ const App = () => {
   };
 
   const addBlog = async (blogObj) => {
+    blogFormRef.current.toggleVisibility();
     const resp = await blogService.create(blogObj);
     setBlogs(blogs.concat(resp));
     setNotification({ message: `a new blog ${blogObj.title} by ${blogObj.author} added`, variant: "success" });
@@ -52,22 +56,39 @@ const App = () => {
     }, 4000);
   };
 
+  const updateBlog = async (blogObj) => {
+    const updatedBlog = await blogService.update(blogObj);
+    setBlogs(blogs.map((b) => (b.id === blogObj.id ? updatedBlog : b)));
+  };
+
+  const removeBlog = async (blog) => {
+    await blogService.erase(blog);
+    setBlogs(blogs.filter((b) => b.id !== blog.id));
+  };
+
   return (
     <div>
       {!user ? (
         <>
           <h2>Log in to app</h2>
-          <LoginForm handleLogin={handleLogin} />
+          <Togglable closeLabel="cancel" openLabel="Show login">
+            <LoginForm handleLogin={handleLogin} />
+          </Togglable>
         </>
       ) : (
         <>
           <h2>Blogs</h2>
           <Notification message={notification.message} variant={notification.variant} />
           {user.name} logged in <button onClick={handleLogout}>Logout</button>
-          <SaveBlogForm addBlog={addBlog} />
-          {blogs.map((blog) => (
-            <Blog key={blog.id} blog={blog} />
-          ))}
+          <br />
+          <Togglable closeLabel="cancel" openLabel="Add blog" ref={blogFormRef}>
+            <SaveBlogForm addBlog={addBlog} />
+          </Togglable>
+          {blogs
+            .sort((a, b) => b.likes - a.likes)
+            .map((blog) => (
+              <Blog removeBlog={removeBlog} updateBlog={updateBlog} key={blog.id} blog={blog} />
+            ))}
         </>
       )}
     </div>
