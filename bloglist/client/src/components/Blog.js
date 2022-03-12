@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Togglable from "./Togglable";
-const Blog = ({ blog, updateBlog, removeBlog }) => {
+const Blog = ({ blog, updateBlog, removeBlog, id }) => {
   const [likes, setLikes] = useState(blog.likes);
   const blogStyle = {
     paddingTop: 10,
@@ -19,7 +19,7 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
   };
 
   return (
-    <div className="blog" style={blogStyle}>
+    <div id={id} className="blog" style={blogStyle}>
       <div>{blog.title}</div>
       <Togglable closeLabel="Hide" openLabel="View">
         <div>

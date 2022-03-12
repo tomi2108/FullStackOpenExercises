@@ -15,14 +15,16 @@ const App = () => {
   const blogFormRef = useRef();
 
   useEffect(() => {
-    const userJson = window.localStorage.getItem("loggedNoteAppUser");
-    const userParsed = JSON.parse(userJson);
-    setUser(userParsed);
+    const userJson = window.localStorage.getItem("loggedBlogAppUser");
+    if (userJson) {
+      const userParsed = JSON.parse(userJson);
+      setUser(userParsed);
+      blogService.setToken(userParsed.token);
+    }
   }, []);
 
   useEffect(() => {
-    if (user) {
-      blogService.setToken(user.token);
+    if (user !== null) {
       blogService.getAll().then((blogs) => setBlogs(blogs));
     }
   }, [user]);
@@ -30,10 +32,10 @@ const App = () => {
   const handleLogin = async (credentials) => {
     try {
       const user = await loginService.login(credentials);
-      window.localStorage.setItem("loggedNoteAppUser", JSON.stringify(user));
+      window.localStorage.setItem("loggedBlogAppUser", JSON.stringify(user));
       user ? setUser(user) : setUser(null);
     } catch (err) {
-      setNotification({ message: `wrong username or password`, variant: "danger" });
+      setNotification({ message: "wrong username or password", variant: "danger" });
       setTimeout(() => {
         setNotification({ message: null, variant: null });
       }, 4000);
@@ -43,7 +45,7 @@ const App = () => {
   const handleLogout = () => {
     setBlogs([]);
     setUser(null);
-    window.localStorage.removeItem("loggedNoteAppUser");
+    window.localStorage.removeItem("loggedBlogAppUser");
   };
 
   const addBlog = async (blogObj) => {
@@ -71,6 +73,7 @@ const App = () => {
       {!user ? (
         <>
           <h2>Log in to app</h2>
+          <Notification message={notification.message} variant={notification.variant} />
           <Togglable closeLabel="cancel" openLabel="Show login">
             <LoginForm handleLogin={handleLogin} />
           </Togglable>
@@ -84,11 +87,13 @@ const App = () => {
           <Togglable closeLabel="cancel" openLabel="Add blog" ref={blogFormRef}>
             <SaveBlogForm addBlog={addBlog} />
           </Togglable>
-          {blogs
-            .sort((a, b) => b.likes - a.likes)
-            .map((blog) => (
-              <Blog removeBlog={removeBlog} updateBlog={updateBlog} key={blog.id} blog={blog} />
-            ))}
+          <div id="blogContainer">
+            {blogs
+              .sort((a, b) => b.likes - a.likes)
+              .map((blog, i) => (
+                <Blog id={`blog${i}`} removeBlog={removeBlog} updateBlog={updateBlog} key={blog.id} blog={blog} />
+              ))}
+          </div>
         </>
       )}
     </div>

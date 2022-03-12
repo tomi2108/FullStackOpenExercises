@@ -10,12 +10,13 @@ blogRouter.get("/", async (request, response) => {
 });
 
 blogRouter.post("/", tokenExtractor, async (request, response) => {
-  const { title, url, author } = request.body;
+  const { title, url, author, likes } = request.body;
 
   const decodedToken = request.token;
   const user = await User.findById(decodedToken.id);
+
   if (user) {
-    const blog = new Blog({ title: title, url: url, author: author });
+    const blog = new Blog({ title: title, url: url, author: author, likes: likes ?? 0 });
     const savedBlog = await blog.save();
     response.status(201).json(savedBlog);
   } else {

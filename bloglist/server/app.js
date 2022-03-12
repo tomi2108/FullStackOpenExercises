@@ -8,6 +8,7 @@ const logger = require("./utils/logger");
 const blogRouter = require("./controllers/blogs");
 const userRouter = require("./controllers/users");
 const loginRouter = require("./controllers/login");
+const testRouter = require("./controllers/tests");
 const middleware = require("./utils/middleware");
 
 logger.info("connecting to MongoDb");
@@ -24,6 +25,9 @@ app.use(middleware.requestLogger);
 app.use("/api/blogs", blogRouter);
 app.use("/api/users", userRouter);
 app.use("/api/login", loginRouter);
+if (process.env.NODE_ENV === "test") {
+  app.use("/tests", testRouter);
+}
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);

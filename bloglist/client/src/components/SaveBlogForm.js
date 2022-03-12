@@ -23,15 +23,15 @@ const SaveBlogForm = ({ addBlog }) => {
     <Form onSubmit={createBlog}>
       <Form.Group>
         <Form.Label>title:</Form.Label>
-        <Form.Control placeholder="title..." onChange={(e) => setNewTitle(e.target.value)} type="text" value={newTitle} />
+        <Form.Control placeholder="title" onChange={(e) => setNewTitle(e.target.value)} type="text" value={newTitle} />
       </Form.Group>
       <Form.Group>
         <Form.Label>author:</Form.Label>
-        <Form.Control placeholder="author..." onChange={(e) => setNewAuthor(e.target.value)} type="text" value={newAuthor} />
+        <Form.Control placeholder="author" onChange={(e) => setNewAuthor(e.target.value)} type="text" value={newAuthor} />
       </Form.Group>
       <Form.Group>
         <Form.Label>url:</Form.Label>
-        <Form.Control placeholder="url..." onChange={(e) => setNewUrl(e.target.value)} type="text" value={newUrl} />
+        <Form.Control placeholder="url" onChange={(e) => setNewUrl(e.target.value)} type="text" value={newUrl} />
       </Form.Group>
 
       <Button variant="success" type="submit">

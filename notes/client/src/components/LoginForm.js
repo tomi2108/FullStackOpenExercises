@@ -18,14 +18,14 @@ const LoginForm = ({ handleLogin }) => {
       <div>
         {" "}
         Username:
-        <input placeholder="Username" type="text" value={username} name="Username" onChange={({ target }) => setUsername(target.value)} />{" "}
+        <input id="username" placeholder="Username" type="text" value={username} name="Username" onChange={({ target }) => setUsername(target.value)} />{" "}
       </div>{" "}
       <div>
         {" "}
         Password:
-        <input placeholder="Password" type="password" value={password} name="Password" onChange={({ target }) => setPassword(target.value)} />{" "}
+        <input id="password" placeholder="Password" type="password" value={password} name="Password" onChange={({ target }) => setPassword(target.value)} />{" "}
       </div>{" "}
-      <Button variant="success" size="sm" type="submit">
+      <Button id="login-btn" variant="success" size="sm" type="submit">
         Login
       </Button>{" "}
     </form>

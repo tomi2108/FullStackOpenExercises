@@ -9,7 +9,7 @@ const SaveNoteForm = ({ addNote }) => {
     e.preventDefault();
     const noteObject = {
       content: newNote,
-      important: Math.random() < 0.5,
+      important: false,
     };
     addNote(noteObject);
     setNewNote("");
@@ -17,7 +17,7 @@ const SaveNoteForm = ({ addNote }) => {
 
   return (
     <Form onSubmit={createNote}>
-      <Form.Control placeholder="Write a new note..." onChange={(e) => setNewNote(e.target.value)} type="text" value={newNote} />
+      <Form.Control id="note-input" placeholder="Write a new note..." onChange={(e) => setNewNote(e.target.value)} type="text" value={newNote} />
       <br />
       <Button variant="success" type="submit">
         Save

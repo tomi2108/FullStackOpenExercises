@@ -18,12 +18,6 @@ const App = () => {
   const noteFormRef = useRef();
 
   useEffect(() => {
-    noteService.getAll().then((resp) => {
-      setNotes(resp);
-    });
-  }, []);
-
-  useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedNoteAppUser");
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
