@@ -1,7 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createAnecdote } from "../reducers/anecdoteReducer";
-import anecdoteService from "../services/anecdotes";
 
 const AnecdoteForm = () => {
   const anecdotes = useSelector((state) => state.anecdotes);
@@ -12,9 +11,7 @@ const AnecdoteForm = () => {
     const content = e.target.content.value;
     e.target.content.value = "";
     const anecdote = { content, votes: 0, id: `${anecdotes.length}` };
-
     dispatch(createAnecdote(anecdote));
-    anecdoteService.create(anecdote);
   };
 
   return (
