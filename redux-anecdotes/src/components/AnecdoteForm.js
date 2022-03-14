@@ -1,17 +1,14 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import { createAnecdote } from "../reducers/anecdoteReducer";
 
-const AnecdoteForm = () => {
-  const anecdotes = useSelector((state) => state.anecdotes);
-  const dispatch = useDispatch();
-
+const AnecdoteForm = (props) => {
   const create = (e) => {
     e.preventDefault();
     const content = e.target.content.value;
     e.target.content.value = "";
-    const anecdote = { content, votes: 0, id: `${anecdotes.length}` };
-    dispatch(createAnecdote(anecdote));
+    const anecdote = { content, votes: 0, id: `${props.anecdotes.length}` };
+    props.createAnecdote(anecdote);
   };
 
   return (
@@ -27,4 +24,15 @@ const AnecdoteForm = () => {
   );
 };
 
-export default AnecdoteForm;
+const mapStateToProps = (state) => {
+  return {
+    anecdotes: state.anecdotes,
+  };
+};
+
+const mapDispatchToProps = {
+  createAnecdote,
+};
+
+const connectedAnecdoteForm = connect(mapStateToProps, mapDispatchToProps)(AnecdoteForm);
+export default connectedAnecdoteForm;
