@@ -1,7 +1,8 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { voteAnecdoteWithId } from "../reducers/anecdoteReducer";
-import { showNotification, hideNotification } from "../reducers/notificationReducer";
+import { setNotification } from "../reducers/notificationReducer";
+import anecdoteService from "../services/anecdotes";
 
 const AnecdoteList = () => {
   const dispatch = useDispatch();
@@ -9,14 +10,14 @@ const AnecdoteList = () => {
   const anecdotes = useSelector((state) => state.anecdotes);
   const filter = useSelector((state) => state.filter);
 
-  const regex = new RegExp(filter, "g");
-  const filteredAnecdotes = [...anecdotes].filter((a) => a.content.match(regex));
+  const regex = new RegExp(filter.toLowerCase(), "g");
+  const filteredAnecdotes = [...anecdotes].filter((a) => a.content.toLowerCase().match(regex));
 
   const vote = (id) => {
     const anecdoteToVote = anecdotes.find((a) => a.id === id);
     dispatch(voteAnecdoteWithId(id));
-    dispatch(showNotification(`you voted '${anecdoteToVote.content}'`));
-    setTimeout(() => hideNotification(), 5000);
+    anecdoteService.update({ ...anecdoteToVote, votes: anecdoteToVote.votes + 1 });
+    dispatch(setNotification(`you voted '${anecdoteToVote.content}'`, 5));
   };
 
   return (
