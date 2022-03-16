@@ -9,6 +9,13 @@ blogRouter.get("/", async (request, response) => {
   response.status(200).json(blogs);
 });
 
+blogRouter.get("/get/:username", async (request, response) => {
+  const user = await User.findOne({ username: request.params.username });
+  const userId = user._id;
+  const blogs = await Blog.find({ userId: userId });
+  response.status(200).json(blogs);
+});
+
 blogRouter.post("/", tokenExtractor, async (request, response) => {
   const { title, url, author, likes } = request.body;
 
@@ -16,7 +23,7 @@ blogRouter.post("/", tokenExtractor, async (request, response) => {
   const user = await User.findById(decodedToken.id);
 
   if (user) {
-    const blog = new Blog({ title: title, url: url, author: author, likes: likes ?? 0 });
+    const blog = new Blog({ title: title, url: url, author: author, likes: likes ?? 0, userId: user._id.toString() });
     const savedBlog = await blog.save();
     response.status(201).json(savedBlog);
   } else {
@@ -40,4 +47,5 @@ blogRouter.put("/:id", async (request, response) => {
   const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blogToUpdate, { new: true, runValidators: true, context: "query" });
   response.json(updatedBlog);
 });
+
 module.exports = blogRouter;

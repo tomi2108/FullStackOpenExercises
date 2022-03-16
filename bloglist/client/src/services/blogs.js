@@ -7,8 +7,13 @@ const setToken = (newToken) => {
 };
 
 const getAll = async () => {
-  const request = await axios.get(baseUrl);
-  return request.then((response) => response.data);
+  const res = await axios.get(baseUrl);
+  return res.data;
+};
+
+const getFromUser = async (user) => {
+  const res = await axios.get(`${baseUrl}/get/${user.username}`);
+  return res.data;
 };
 
 const create = async (newObject) => {
@@ -17,8 +22,8 @@ const create = async (newObject) => {
       Authorization: token,
     },
   };
-  const req = await axios.post(baseUrl, newObject, config);
-  return req.then((res) => res.data);
+  const res = await axios.post(baseUrl, newObject, config);
+  return res.data;
 };
 
 const update = async (newObject) => {
@@ -27,8 +32,8 @@ const update = async (newObject) => {
       Authorization: token,
     },
   };
-  const req = await axios.put(`${baseUrl}/${newObject.id}`, newObject, config);
-  return req.then((res) => res.data);
+  const res = await axios.put(`${baseUrl}/${newObject.id}`, newObject, config);
+  return res.data;
 };
 
 const erase = async (obj) => {
@@ -37,9 +42,9 @@ const erase = async (obj) => {
       Authorization: token,
     },
   };
-  const req = await axios.delete(`${baseUrl}/${obj.id}`, config);
-  return req.then((res) => res.data);
+  const res = await axios.delete(`${baseUrl}/${obj.id}`, config);
+  return res.data;
 };
 
-const toExport = { getAll, create, update, erase, setToken };
+const toExport = { getFromUser, getAll, create, update, erase, setToken };
 export default toExport;

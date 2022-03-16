@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { createAnecdote } from "../reducers/anecdoteReducer";
+import { TextField, Button } from "@material-ui/core";
 
 const AnecdoteForm = (props) => {
   const create = (e) => {
@@ -16,9 +17,12 @@ const AnecdoteForm = (props) => {
       <h2>create new</h2>
       <form onSubmit={create}>
         <div>
-          <input name="content" />
+          <TextField label="content" name="content" />
         </div>
-        <button type="submit">create</button>
+        <br />
+        <Button variant="contained" color="primary" type="submit">
+          create
+        </Button>
       </form>
     </>
   );

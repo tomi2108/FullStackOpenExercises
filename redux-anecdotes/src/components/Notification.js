@@ -1,16 +1,12 @@
 import { connect } from "react-redux";
+import { Alert } from "@material-ui/lab";
+
 const Notification = (props) => {
-  console.log(props);
   const show = props.notification === "" ? false : true;
 
-  const style = {
-    border: "solid",
-    padding: 10,
-    borderWidth: 1,
-  };
   return show ? (
     <>
-      <div style={style}>{props.notification}</div>
+      <Alert severity="success">{props.notification}</Alert>
       <br />
     </>
   ) : (

@@ -1,6 +1,12 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import Togglable from "./Togglable";
-const Blog = ({ blog, updateBlog, removeBlog, id }) => {
+
+import { putBlog, deleteBlog } from "../reducers/blogsReducer";
+
+const Blog = ({ blog, id }) => {
+  const dispatch = useDispatch();
+
   const [likes, setLikes] = useState(blog.likes);
   const blogStyle = {
     paddingTop: 10,
@@ -9,13 +15,15 @@ const Blog = ({ blog, updateBlog, removeBlog, id }) => {
     borderWidth: 1,
     marginBottom: 5,
   };
+
   const addLike = () => {
     setLikes(likes + 1);
     const newBlog = { ...blog, likes: likes + 1 };
-    updateBlog(newBlog);
+    dispatch(putBlog(newBlog));
   };
+
   const remove = () => {
-    removeBlog(blog);
+    dispatch(deleteBlog(blog));
   };
 
   return (

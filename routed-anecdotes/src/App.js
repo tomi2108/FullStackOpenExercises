@@ -7,6 +7,7 @@ import Footer from "./components/Footer";
 import Menu from "./components/Menu";
 import Anecdote from "./components/Anecdote";
 import Notification from "./components/Notification";
+
 const initialState = [
   {
     content: "If it hurts, do it more often",
@@ -51,7 +52,7 @@ const App = () => {
   };
 
   return (
-    <div>
+    <div className="container">
       <h1>Software anecdotes</h1>
 
       <Menu />
@@ -60,7 +61,7 @@ const App = () => {
 
       <Routes>
         <Route path="/anecdote/:id" element={<Anecdote anecdote={anecdote} />} />
-        <Route path="/anecdotes" element={<AnecdotesList anecdotes={anecdotes} />} />
+        <Route path="/anecdotes" element={<AnecdotesList vote={vote} anecdotes={anecdotes} />} />
         <Route path="/create" element={<CreateNew setNotification={setNotification} addNew={addNew} />} />
         <Route path="/" element={<About />} />
       </Routes>

@@ -6,6 +6,8 @@ import Filter from "./components/Filter";
 import Notification from "./components/Notification";
 import { initializeAnecdotes } from "./reducers/anecdoteReducer";
 
+import Container from "@material-ui/core/Container";
+
 const App = () => {
   const dispatch = useDispatch();
 
@@ -14,14 +16,14 @@ const App = () => {
   }, [dispatch]);
 
   return (
-    <div>
+    <Container>
       <Notification />
       <Filter />
       <h2>Anecdotes</h2>
       <AnecdoteForm />
       <br />
       <AnecdoteList />
-    </div>
+    </Container>
   );
 };
 

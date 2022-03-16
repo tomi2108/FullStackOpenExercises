@@ -1,3 +1,4 @@
+import { Table, TableBody, TableCell, TableContainer, TableRow } from "@material-ui/core";
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { voteAnecdote } from "../reducers/anecdoteReducer";
@@ -19,19 +20,23 @@ const AnecdoteList = () => {
   };
 
   return (
-    <>
-      {filteredAnecdotes
-        .sort((a, b) => b.votes - a.votes)
-        .map((anecdote) => (
-          <div key={anecdote.id}>
-            <div>{anecdote.content}</div>
-            <div>
-              has {anecdote.votes}
-              <button onClick={() => vote(anecdote.id)}>vote</button>
-            </div>
-          </div>
-        ))}
-    </>
+    <TableContainer>
+      <Table>
+        <TableBody>
+          {filteredAnecdotes
+            .sort((a, b) => b.votes - a.votes)
+            .map((anecdote) => (
+              <TableRow key={anecdote.id}>
+                <TableCell>{anecdote.content}</TableCell>
+                <TableCell>has {anecdote.votes}</TableCell>
+                <TableCell>
+                  <button onClick={() => vote(anecdote.id)}>vote</button>
+                </TableCell>
+              </TableRow>
+            ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 };
 
