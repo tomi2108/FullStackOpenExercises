@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Routes, Route, useMatch } from "react-router-dom";
 import About from "./components/About";
 import AnecdotesList from "./components/AnecdotesList";
@@ -7,7 +7,6 @@ import Footer from "./components/Footer";
 import Menu from "./components/Menu";
 import Anecdote from "./components/Anecdote";
 import Notification from "./components/Notification";
-
 const initialState = [
   {
     content: "If it hurts, do it more often",
