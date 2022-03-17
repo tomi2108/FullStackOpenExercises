@@ -2,7 +2,7 @@ import React from "react";
 import Blog from "./Blog";
 import { useSelector } from "react-redux";
 
-const BlogList = () => {
+const CompleteBloglist = () => {
   const blogs = useSelector((state) => state.blogs);
   const blogsToSort = [...blogs];
   return (
@@ -16,4 +16,4 @@ const BlogList = () => {
   );
 };
 
-export default BlogList;
+export default CompleteBloglist;

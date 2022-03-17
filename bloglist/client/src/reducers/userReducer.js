@@ -32,6 +32,7 @@ export const login = (credentials) => {
   } else {
     return async (dispatch) => {
       const loggedUser = credentials;
+      blogService.setToken(loggedUser.token);
       dispatch(setUser(loggedUser));
     };
   }

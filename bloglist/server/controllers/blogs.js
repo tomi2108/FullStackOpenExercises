@@ -6,6 +6,7 @@ const { tokenExtractor } = require("../utils/middleware");
 
 blogRouter.get("/", async (request, response) => {
   const blogs = await Blog.find({});
+  console.log(blogs);
   response.status(200).json(blogs);
 });
 

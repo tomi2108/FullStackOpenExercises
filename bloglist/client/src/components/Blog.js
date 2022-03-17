@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import Togglable from "./Togglable";
 
 import { putBlog, deleteBlog } from "../reducers/blogsReducer";
+import { Link } from "react-router-dom";
 
 const Blog = ({ blog }) => {
   const dispatch = useDispatch();
@@ -26,7 +27,7 @@ const Blog = ({ blog }) => {
 
   return (
     <div id={blog.id} className="blog" style={blogStyle}>
-      <div>{blog.title}</div>
+      <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
       <Togglable closeLabel="Hide" openLabel="View">
         <div>
           url: {blog.url}
@@ -36,7 +37,7 @@ const Blog = ({ blog }) => {
             like
           </button>
           <br />
-          author: {blog.author}
+          author: <Link to={`/user/${blog.author}`}>{blog.author}</Link>
           <button onClick={remove}>delete</button>
         </div>
       </Togglable>

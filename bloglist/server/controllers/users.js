@@ -28,4 +28,8 @@ userRouter.get("/", async (request, response) => {
   response.json(users);
 });
 
+userRouter.get("/:username", async (req, res) => {
+  const user = await User.find({ username: req.params.username });
+  res.json(user);
+});
 module.exports = userRouter;

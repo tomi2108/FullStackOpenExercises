@@ -27,9 +27,16 @@ const blogSlice = createSlice({
 
 export const { emptyBlogs, updateBlog, appendBlog, setBlogs, eraseBlog } = blogSlice.actions;
 
-export const initializeBlogs = (user) => {
+export const initializeUserBlogs = (user) => {
   return async (dispatch) => {
     const blogs = await blogService.getFromUser(user);
+    dispatch(setBlogs(blogs));
+  };
+};
+
+export const initializeAllBlogs = () => {
+  return async (dispatch) => {
+    const blogs = await blogService.getAll();
     dispatch(setBlogs(blogs));
   };
 };
