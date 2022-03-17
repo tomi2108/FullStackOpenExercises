@@ -1,30 +1,31 @@
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import Button from "react-bootstrap/Button";
+import { useField } from "../hooks";
 
 const LoginForm = ({ handleLogin }) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const username = useField("text");
+  const password = useField("password");
 
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
         handleLogin({ username: username, password: password });
-        setUsername("");
-        setPassword("");
+        username.value = "";
+        password.value = "";
       }}
     >
       {" "}
       <div>
         {" "}
         Username:
-        <input placeholder="Username" type="text" value={username} name="Username" onChange={({ target }) => setUsername(target.value)} />{" "}
+        <input placeholder="Username" name="Username" {...username} />{" "}
       </div>{" "}
       <div>
         {" "}
         Password:
-        <input placeholder="Password" type="password" value={password} name="Password" onChange={({ target }) => setPassword(target.value)} />{" "}
+        <input placeholder="Password" name="Password" {...password} />{" "}
       </div>{" "}
       <Button variant="success" size="sm" type="submit">
         Login

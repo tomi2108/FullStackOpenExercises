@@ -9,11 +9,16 @@ const PersonalBlogList = ({ username }) => {
 
   return (
     <div id="blogContainer">
-      {blogsToSort
-        .sort((a, b) => b.likes - a.likes)
-        .map((blog) => (
-          <BlogMiniDetails key={blog.id} blog={blog} />
-        ))}
+      <h4>User has {blogsToSort.length} Blogs</h4>
+      <ul>
+        {blogsToSort
+          .sort((a, b) => b.likes - a.likes)
+          .map((blog) => (
+            <li key={blog.id}>
+              <BlogMiniDetails blog={blog} />
+            </li>
+          ))}
+      </ul>
     </div>
   );
 };

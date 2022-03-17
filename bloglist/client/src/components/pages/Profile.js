@@ -17,8 +17,12 @@ const Profile = () => {
 
   return (
     <div>
-      <h1>{user.name}</h1>
-      <PersonalBlogList user={user.username} />
+      <h1>
+        {user.name}
+        {"'"}s profile
+      </h1>
+      <h3>Username: {user.username}</h3>
+      <PersonalBlogList username={user.username} />
     </div>
   );
 };
