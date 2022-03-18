@@ -1,11 +1,11 @@
 import React, { useRef } from "react";
 import { useDispatch } from "react-redux";
-import SaveBlogForm from "../SaveBlogForm";
+import SaveBlogForm from "../Blogs/SaveBlogForm";
 import Togglable from "../Togglable";
 
 import { setNotification } from "../../reducers/notificationReducer";
 import { createBlog } from "../../reducers/blogsReducer";
-import AllBlogList from "../AllBlogsList";
+import AllBlogList from "../Blogs/AllBlogsList";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -19,10 +19,10 @@ const Home = () => {
 
   return (
     <div>
+      <AllBlogList />
       <Togglable closeLabel="cancel" openLabel="Add blog" ref={blogFormRef}>
         <SaveBlogForm addBlog={addBlog} />
       </Togglable>
-      <AllBlogList />
     </div>
   );
 };

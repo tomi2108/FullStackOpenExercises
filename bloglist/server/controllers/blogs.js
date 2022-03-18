@@ -24,7 +24,7 @@ blogRouter.post("/", tokenExtractor, async (request, response) => {
   const user = await User.findById(decodedToken.id);
 
   if (user) {
-    const blog = new Blog({ title: title, url: url, author: author, likes: likes ?? 0, userId: user._id.toString() });
+    const blog = new Blog({ title: title, url: url, author: author, likes: likes ?? 0, userId: user._id.toString(), comments: [] });
     const savedBlog = await blog.save();
     response.status(201).json(savedBlog);
   } else {

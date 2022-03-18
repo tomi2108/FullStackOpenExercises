@@ -6,17 +6,12 @@ import Togglable from "../Togglable";
 import LoginForm from "../LoginForm";
 
 import { login } from "../../reducers/userReducer";
-import { setNotification } from "../../reducers/notificationReducer";
 
 const LoginPage = () => {
   const dispatch = useDispatch();
 
   const handleLogin = async (credentials) => {
-    try {
-      dispatch(login(credentials));
-    } catch (err) {
-      dispatch(setNotification({ message: "wrong username or password", variant: "danger" }, 4));
-    }
+    dispatch(login(credentials));
   };
 
   return (

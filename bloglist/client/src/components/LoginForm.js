@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Button from "react-bootstrap/Button";
 import { useField } from "../hooks";
 
 const LoginForm = ({ handleLogin }) => {
@@ -11,25 +10,20 @@ const LoginForm = ({ handleLogin }) => {
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        handleLogin({ username: username, password: password });
-        username.value = "";
-        password.value = "";
+        handleLogin({ username: username.input.value, password: password.input.value });
+        username.reset();
+        password.reset();
       }}
     >
-      {" "}
       <div>
-        {" "}
-        Username:
-        <input placeholder="Username" name="Username" {...username} />{" "}
-      </div>{" "}
+        <label htmlFor="Username">Username:</label>
+        <input placeholder="username" name="username" {...username.input} />{" "}
+      </div>
       <div>
-        {" "}
-        Password:
-        <input placeholder="Password" name="Password" {...password} />{" "}
-      </div>{" "}
-      <Button variant="success" size="sm" type="submit">
-        Login
-      </Button>{" "}
+        <label htmlFor="password">Password:</label>
+        <input placeholder="Password" name="password" {...password.input} />{" "}
+      </div>
+      <button type="submit">Login</button>
     </form>
   );
 };

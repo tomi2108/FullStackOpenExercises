@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useMatch } from "react-router-dom";
-import PersonalBlogList from "../PersonalBlogList";
+import PersonalBlogList from "../Blogs/PersonalBlogList";
 import userService from "../../services/user";
 
 const Profile = () => {

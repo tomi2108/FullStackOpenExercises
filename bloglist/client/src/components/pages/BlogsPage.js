@@ -9,9 +9,10 @@ import { resetBlogs } from "../../reducers/blogsReducer";
 import { logout } from "../../reducers/userReducer";
 
 import Home from "./Home";
-import Profile from "./Profile";
-import BlogDetails from "../BlogDetails";
-import UsersList from "../UsersList";
+import Profile from "../Users/Profile";
+import BlogDetails from "../Blogs/BlogDetails";
+import UsersList from "../Users/UsersList";
+import { Button } from "@material-ui/core";
 
 const BlogsPage = ({ user }) => {
   const dispatch = useDispatch();
@@ -23,10 +24,14 @@ const BlogsPage = ({ user }) => {
 
   return (
     <>
+      <Button>
+        <Link to="/">Home</Link>
+      </Button>
+      <Button>
+        <Link to="/all/users">Users</Link>
+      </Button>
       <h2>Blogs</h2>
       <Notification />
-      <Link to="/">Home</Link>
-      <Link to="/all/users">Users</Link>
       <br />
       <Link to={`/user/${user.username}`}>{user.name}</Link> logged in <button onClick={handleLogout}>Logout</button>
       <Routes>

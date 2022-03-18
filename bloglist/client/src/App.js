@@ -6,6 +6,8 @@ import { login } from "./reducers/userReducer";
 import LoginPage from "./components/pages/LoginPage";
 import BlogsPage from "./components/pages/BlogsPage";
 
+import Container from "@material-ui/core/Container";
+
 const App = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
@@ -24,7 +26,7 @@ const App = () => {
     }
   }, [user, dispatch]);
 
-  return <div>{!user ? <LoginPage /> : <BlogsPage user={user} />}</div>;
+  return <Container>{!user ? <LoginPage /> : <BlogsPage user={user} />}</Container>;
 };
 
 export default App;

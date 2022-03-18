@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { putBlog } from "../reducers/blogsReducer";
+import { putBlog } from "../../reducers/blogsReducer";
 
 const BlogMiniDetails = ({ blog }) => {
   const dispatch = useDispatch();
