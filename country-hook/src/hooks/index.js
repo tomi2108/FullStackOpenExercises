@@ -28,5 +28,5 @@ export const useCountry = (name) => {
     fetchData();
   }, [name]);
 
-  return country;
+  return {...country};
 };
