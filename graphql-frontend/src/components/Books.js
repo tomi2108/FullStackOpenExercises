@@ -1,25 +1,27 @@
-import { useQuery } from "@apollo/client";
-import { useState } from "react";
-import { ALL_BOOKS } from "../queries";
+import { useLazyQuery } from "@apollo/client";
+import { useEffect, useState } from "react";
+import { BOOKS_BY_GENRE } from "../queries";
 
 const Books = (props) => {
-  const { data, loading } = useQuery(ALL_BOOKS);
   const [genreFilter, setGenreFilter] = useState("all");
-  if (loading && props.show) return <div>loading...</div>;
+  const [genres, setGenres] = useState([]);
 
-  if (!props.show) {
-    return null;
-  }
+  const [getBooksByGenre, booksByGenreQuery] = useLazyQuery(BOOKS_BY_GENRE);
 
-  const books = data.allBooks;
+  useEffect(() => {
+    getBooksByGenre({ variables: { genre: genreFilter === "all" ? null : genreFilter } });
+  }, [genreFilter, getBooksByGenre]);
 
-  let genres = [];
+  if (!props.show) return null;
+  if (booksByGenreQuery.loading && props.show) return <div>loading...</div>;
 
-  if (books) {
+  let books = [];
+  books = booksByGenreQuery.data.allBooks;
+
+  if (genreFilter === "all") {
     books.forEach((b) => {
-      const bookGenres = b.genres;
-      bookGenres.forEach((g) => {
-        if (!genres.includes(g)) genres = genres.concat(g);
+      b.genres.forEach((g) => {
+        if (!genres.includes(g)) setGenres(genres.concat(g));
       });
     });
   }
@@ -35,18 +37,13 @@ const Books = (props) => {
             <th>author</th>
             <th>published</th>
           </tr>
-          {books
-            .filter((b) => {
-              if (genreFilter !== "all") return b.genres.includes(genreFilter);
-              return true;
-            })
-            .map((b) => (
-              <tr key={b.id}>
-                <td>{b.title}</td>
-                <td>{b.author.name}</td>
-                <td>{b.published}</td>
-              </tr>
-            ))}
+          {books.map((b) => (
+            <tr key={b.id}>
+              <td>{b.title}</td>
+              <td>{b.author.name}</td>
+              <td>{b.published}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
       <button onClick={() => setGenreFilter("all")}>all genres</button>
