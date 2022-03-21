@@ -21,7 +21,8 @@ const typeDefs = gql`
   }
 
   type Token {
-    value: String!
+    username: String!
+    token: String!
   }
 
   type Book {
@@ -32,7 +33,7 @@ const typeDefs = gql`
     id: ID!
   }
   type Author {
-    id: ID
+    id: ID!
     name: String!
     born: Int
     bookCount: Int
@@ -49,7 +50,7 @@ const typeDefs = gql`
     createUser(username: String!, favoriteGenre: String!): User
     login(username: String!, password: String!): Token
     addBook(title: String!, author: String!, published: Int!, genres: [String!]!): Book!
-    editAuthor(name: String!, setBornTo: Int): Author
+    editAuthor(name: String!, setBornTo: Int!): Author!
   }
 `;
 
@@ -94,10 +95,16 @@ const resolvers = {
     },
     editAuthor: async (root, args, { currentUser }) => {
       if (!currentUser) throw new AuthenticationError("not authenticated");
+      console.log(args);
       const author = await Author.findOne({ name: args.name });
       if (!author) return null;
-      author.born = args.setBornTo;
-      return await author.save();
+      console.log(author);
+      console.log(author._id.toString());
+      const newAuthor = { born: args.setBornTo };
+      console.log(newAuthor);
+      const updatedAuthor = await Author.findByIdAndUpdate(author._id.toString(), newAuthor, { new: true, runValidators: true, context: "query" });
+      console.log(updatedAuthor);
+      return updatedAuthor;
     },
     createUser: async (root, args) => {
       const user = new User({ username: args.username, favoriteGenre: args.favoriteGenre });
@@ -109,7 +116,7 @@ const resolvers = {
       const user = await User.findOne({ username: args.username });
       if (!user || args.password !== "secret") throw new UserInputError("wrong credentials");
       const userForToken = { username: user.username, id: user._id };
-      return { value: jwt.sign(userForToken, JWT_SECRET) };
+      return { token: jwt.sign(userForToken, JWT_SECRET), username: user.username };
     },
   },
 };
@@ -124,6 +131,7 @@ const server = new ApolloServer({
       const currentUser = await User.findById(decodedToken.id);
       return { currentUser };
     }
+    return null;
   },
 });
 

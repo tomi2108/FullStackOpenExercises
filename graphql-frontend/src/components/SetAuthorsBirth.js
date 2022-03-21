@@ -20,7 +20,7 @@ const SetAuthorsBirth = ({ authors }) => {
       <form onSubmit={submit}>
         <select onChange={(e) => setSelectValue(e.target.value)}>
           Select author
-          {authors.map((a) => {
+          {authors.map((a, i) => {
             return (
               <option key={a.id} value={a.name}>
                 {a.name}
