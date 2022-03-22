@@ -7,5 +7,3 @@ export const calculateBmi = (height: number, mass: number): string => {
 
   return "Overweight (unhealthy weight)";
 };
-
-console.log(calculateBmi(Number(process.argv[2]), Number(process.argv[3])));
