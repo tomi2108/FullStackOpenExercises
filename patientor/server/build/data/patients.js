@@ -1,14 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.patients = void 0;
-const types_1 = require("../types");
-exports.patients = [
+const toNewPatient_1 = require("../utils/toNewPatient");
+const data = [
     {
         id: "d2773336-f723-11e9-8f0b-362b9e155667",
         name: "John McClane",
         dateOfBirth: "1986-07-09",
         ssn: "090786-122X",
-        gender: types_1.Gender.Male,
+        gender: "male",
         occupation: "New york city cop",
     },
     {
@@ -16,7 +16,7 @@ exports.patients = [
         name: "Martin Riggs",
         dateOfBirth: "1979-01-30",
         ssn: "300179-77A",
-        gender: types_1.Gender.Male,
+        gender: "male",
         occupation: "Cop",
     },
     {
@@ -24,7 +24,7 @@ exports.patients = [
         name: "Hans Gruber",
         dateOfBirth: "1970-04-25",
         ssn: "250470-555L",
-        gender: types_1.Gender.Male,
+        gender: "male",
         occupation: "Technician",
     },
     {
@@ -32,7 +32,7 @@ exports.patients = [
         name: "Dana Scully",
         dateOfBirth: "1974-01-05",
         ssn: "050174-432N",
-        gender: types_1.Gender.Female,
+        gender: "female",
         occupation: "Forensic Pathologist",
     },
     {
@@ -40,7 +40,12 @@ exports.patients = [
         name: "Matti Luukkainen",
         dateOfBirth: "1971-04-09",
         ssn: "090471-8890",
-        gender: types_1.Gender.Male,
+        gender: "male",
         occupation: "Digital evangelist",
     },
 ];
+exports.patients = data.map((obj) => {
+    const object = (0, toNewPatient_1.toNewPatient)(obj);
+    object.id = obj.id;
+    return object;
+});

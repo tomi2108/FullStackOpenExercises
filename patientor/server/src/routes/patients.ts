@@ -1,6 +1,6 @@
 import express from "express";
-import { toNewPatient } from "../../utils/toNewPatient";
 import { addPatient, getNonSensitivePatients } from "../services/patientsService";
+import { toNewPatient } from "../utils/toNewPatient";
 
 const router = express.Router();
 

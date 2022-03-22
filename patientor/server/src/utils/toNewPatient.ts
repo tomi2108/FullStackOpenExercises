@@ -1,4 +1,4 @@
-import { Gender, newPatient } from "../src/types";
+import { Gender, newPatient } from "../types";
 
 const parseToString = (name: unknown, value: string): string => {
   if (!name || !isString(name)) throw new Error(`incorrect or missing ${value}`);
@@ -10,7 +10,11 @@ const parseGender = (gender: unknown): Gender => {
   if (!gender || !isGender(gender)) throw new Error(`incorrect or missing gender`);
   return gender;
 };
-const isGender = (gender: any): gender is Gender => Object.values(Gender).includes(gender);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const isGender = (param: any): param is Gender => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  return Object.values(Gender).includes(param);
+};
 
 const parseDate = (date: unknown): string => {
   if (!date || !isString(date) || !isDate(date)) {
@@ -22,15 +26,15 @@ const isDate = (date: string): boolean => {
   return Boolean(Date.parse(date));
 };
 
-export const toNewPatient = (object: any): newPatient | undefined => {
+type Fields = { name: unknown; dateOfBirth: unknown; gender: unknown; occupation: unknown; ssn?: unknown };
+
+export const toNewPatient = ({ name, dateOfBirth, gender, occupation, ssn }: Fields): newPatient => {
   const newEntry: newPatient = {
-    name: parseToString(object.name, "name"),
-    dateOfBirth: parseDate(object.dateOfBirth),
-    gender: parseGender(object.gender),
-    occupation: parseToString(object.occupation, "occupation"),
+    name: parseToString(name, "name"),
+    dateOfBirth: parseDate(dateOfBirth),
+    gender: parseGender(gender),
+    occupation: parseToString(occupation, "occupation"),
   };
-  console.log(object.ssn, Boolean(object.ssn));
-  if (object.ssn) newEntry["ssn"] = object.ssn;
-  console.log(newEntry);
+  if (ssn) newEntry["ssn"] = parseToString(ssn, "ssn");
   return newEntry;
 };
