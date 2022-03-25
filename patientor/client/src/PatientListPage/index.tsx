@@ -21,8 +21,8 @@ import { Patient } from "../types";
 const PatientListPage = () => {
   const [{ patients }, dispatch] = useStateValue();
 
-  const [modalOpen, setModalOpen] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string>();
+  const [modalOpen, setModalOpen] = React.useState<boolean>(false);
 
   const openModal = (): void => setModalOpen(true);
 
