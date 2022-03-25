@@ -1,16 +1,22 @@
-import React from "react";
+import {
+  Box,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@material-ui/core";
 import axios from "axios";
-import { Box, Table, Button, TableHead, Typography } from "@material-ui/core";
-
-import { PatientFormValues } from "../AddPatientModal/AddPatientForm";
+import React from "react";
+import { Link } from "react-router-dom";
 import AddPatientModal from "../AddPatientModal";
-import { Patient } from "../types";
-import { apiBaseUrl } from "../constants";
+import { PatientFormValues } from "../AddPatientModal/AddPatientForm";
 import HealthRatingBar from "../components/HealthRatingBar";
+import { apiBaseUrl } from "../constants";
 import { useStateValue } from "../state";
-import { TableCell } from "@material-ui/core";
-import { TableRow } from "@material-ui/core";
-import { TableBody } from "@material-ui/core";
+import { Patient } from "../types";
 
 const PatientListPage = () => {
   const [{ patients }, dispatch] = useStateValue();
@@ -36,7 +42,9 @@ const PatientListPage = () => {
     } catch (e: unknown) {
       if (axios.isAxiosError(e)) {
         console.error(e?.response?.data || "Unrecognized axios error");
-        setError(String(e?.response?.data?.error) || "Unrecognized axios error");
+        setError(
+          String(e?.response?.data?.error) || "Unrecognized axios error"
+        );
       } else {
         console.error("Unknown error", e);
         setError("Unknown error");
@@ -61,16 +69,20 @@ const PatientListPage = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {Object.values(patients).map((patient: Patient) => (
-            <TableRow key={patient.id}>
-              <TableCell>{patient.name}</TableCell>
-              <TableCell>{patient.gender}</TableCell>
-              <TableCell>{patient.occupation}</TableCell>
-              <TableCell>
-                <HealthRatingBar showText={false} rating={1} />
-              </TableCell>
-            </TableRow>
-          ))}
+          {Object.values(patients).map((patient: Patient) => {
+            return (
+              <TableRow key={patient.id}>
+                <TableCell>
+                  <Link to={`/patients/${patient.id}`}>{patient.name}</Link>
+                </TableCell>
+                <TableCell>{patient.gender}</TableCell>
+                <TableCell>{patient.occupation}</TableCell>
+                <TableCell>
+                  <HealthRatingBar showText={false} rating={1} />
+                </TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
       <AddPatientModal

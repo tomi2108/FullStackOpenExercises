@@ -1,7 +1,6 @@
-import React from "react";
-import Blog from "./Blog";
-import { useSelector } from "react-redux";
 import { Paper, Table, TableBody, TableContainer, TableRow } from "@material-ui/core";
+import { useSelector } from "react-redux";
+import Blog from "./Blog";
 
 const AllBlogsList = () => {
   const blogs = useSelector((state) => state.blogs);

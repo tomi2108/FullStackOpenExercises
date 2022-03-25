@@ -1,10 +1,7 @@
-import React from "react";
+import { Button, TableCell } from "@material-ui/core";
 import { useDispatch } from "react-redux";
-
-import { deleteBlog } from "../../reducers/blogsReducer";
-
-import { TableCell, Button } from "@material-ui/core";
 import { Link } from "react-router-dom";
+import { deleteBlog } from "../../reducers/blogsReducer";
 
 const Blog = ({ blog }) => {
   const dispatch = useDispatch();

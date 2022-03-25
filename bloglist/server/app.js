@@ -20,6 +20,7 @@ mongoose
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static("../client/build"));
 app.use(middleware.requestLogger);
 
 app.use("/api/blogs", blogRouter);

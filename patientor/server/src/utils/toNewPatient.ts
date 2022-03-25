@@ -1,13 +1,16 @@
-import { Gender, newPatient } from "../types";
+import { Entry, Gender, newPatient } from "../types";
 
 const parseToString = (name: unknown, value: string): string => {
-  if (!name || !isString(name)) throw new Error(`incorrect or missing ${value}`);
+  if (!name || !isString(name))
+    throw new Error(`incorrect or missing ${value}`);
   return name;
 };
-const isString = (text: unknown): text is string => typeof text === "string" || text instanceof String;
+const isString = (text: unknown): text is string =>
+  typeof text === "string" || text instanceof String;
 
 const parseGender = (gender: unknown): Gender => {
-  if (!gender || !isGender(gender)) throw new Error(`incorrect or missing gender`);
+  if (!gender || !isGender(gender))
+    throw new Error(`incorrect or missing gender`);
   return gender;
 };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -26,10 +29,25 @@ const isDate = (date: string): boolean => {
   return Boolean(Date.parse(date));
 };
 
-type Fields = { name: unknown; dateOfBirth: unknown; gender: unknown; occupation: unknown; ssn?: unknown };
+type Fields = {
+  name: unknown;
+  dateOfBirth: unknown;
+  gender: unknown;
+  occupation: unknown;
+  ssn?: unknown;
+  entries?: Entry[];
+};
 
-export const toNewPatient = ({ name, dateOfBirth, gender, occupation, ssn }: Fields): newPatient => {
+export const toNewPatient = ({
+  name,
+  dateOfBirth,
+  gender,
+  occupation,
+  ssn,
+  entries,
+}: Fields): newPatient => {
   const newEntry: newPatient = {
+    entries: entries,
     name: parseToString(name, "name"),
     dateOfBirth: parseDate(dateOfBirth),
     gender: parseGender(gender),

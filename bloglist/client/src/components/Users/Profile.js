@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useMatch } from "react-router-dom";
-import PersonalBlogList from "../Blogs/PersonalBlogList";
 import userService from "../../services/user";
+import PersonalBlogList from "../Blogs/PersonalBlogList";
 
 const Profile = () => {
   const [user, setUser] = useState({});
@@ -11,7 +11,7 @@ const Profile = () => {
     userService.getByUsername(match.params.username).then((res) => {
       setUser(res);
     });
-  }, []);
+  }, [match.params.username]);
 
   if (!user) return null;
 

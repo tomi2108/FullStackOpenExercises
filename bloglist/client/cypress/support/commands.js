@@ -1,3 +1,4 @@
+/* globals cy Cypress*/
 Cypress.Commands.add("createBlog", ({ title, author, url, likes }) => {
   cy.request({
     url: "http://localhost:3003/api/blogs",

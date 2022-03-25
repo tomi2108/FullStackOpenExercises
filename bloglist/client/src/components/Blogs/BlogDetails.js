@@ -1,4 +1,3 @@
-import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useMatch } from "react-router-dom";
 import { useField } from "../../hooks";

@@ -1,14 +1,12 @@
-import React from "react";
+import { Button, Container, Divider, Typography } from "@material-ui/core";
 import axios from "axios";
-import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
-import { Button, Divider, Container } from "@material-ui/core";
-
+import React from "react";
+import { BrowserRouter as Router, Link, Route, Routes } from "react-router-dom";
+import PatientDetails from "./components/PatientDetails";
 import { apiBaseUrl } from "./constants";
+import PatientListPage from "./PatientListPage";
 import { useStateValue } from "./state";
 import { Patient } from "./types";
-
-import PatientListPage from "./PatientListPage";
-import { Typography } from "@material-ui/core";
 
 const App = () => {
   const [, dispatch] = useStateValue();
@@ -41,6 +39,7 @@ const App = () => {
           <Divider hidden />
           <Routes>
             <Route path="/" element={<PatientListPage />} />
+            <Route path="/patients/:id" element={<PatientDetails />} />
           </Routes>
         </Container>
       </Router>

@@ -1,18 +1,13 @@
-import React from "react";
+import { Button } from "@material-ui/core";
 import { useDispatch } from "react-redux";
 import { Link, Route, Routes } from "react-router-dom";
-
-import Notification from "../Notification";
-
 import { resetBlogs } from "../../reducers/blogsReducer";
-
 import { logout } from "../../reducers/userReducer";
-
-import Home from "./Home";
-import Profile from "../Users/Profile";
 import BlogDetails from "../Blogs/BlogDetails";
+import Notification from "../Notification";
+import Profile from "../Users/Profile";
 import UsersList from "../Users/UsersList";
-import { Button } from "@material-ui/core";
+import Home from "./Home";
 
 const BlogsPage = ({ user }) => {
   const dispatch = useDispatch();

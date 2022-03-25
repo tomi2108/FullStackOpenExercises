@@ -1,6 +1,4 @@
-import React from "react";
 import { useSelector } from "react-redux";
-
 import { useField } from "../../hooks";
 
 const SaveBlogForm = ({ addBlog }) => {

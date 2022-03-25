@@ -1,12 +1,10 @@
-import React, { useEffect } from "react";
+import Container from "@material-ui/core/Container";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
+import BlogsPage from "./components/pages/BlogsPage";
+import LoginPage from "./components/pages/LoginPage";
 import { initializeAllBlogs } from "./reducers/blogsReducer";
 import { login } from "./reducers/userReducer";
-import LoginPage from "./components/pages/LoginPage";
-import BlogsPage from "./components/pages/BlogsPage";
-
-import Container from "@material-ui/core/Container";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -18,7 +16,7 @@ const App = () => {
       const userParsed = JSON.parse(userJson);
       dispatch(login(userParsed));
     }
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (user !== null) {

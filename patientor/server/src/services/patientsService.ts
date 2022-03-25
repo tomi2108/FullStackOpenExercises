@@ -5,7 +5,17 @@ import { newPatient, nonSensitivePatient, Patient } from "../types";
 const newId = uuid();
 
 export const getNonSensitivePatients = (): nonSensitivePatient[] => {
-  return patients.map(({ id, gender, name, dateOfBirth, occupation }) => ({ id, gender, name, dateOfBirth, occupation }));
+  const nonSensitivePatients = patients.map(
+    ({ id, gender, name, dateOfBirth, occupation, entries }) => ({
+      id,
+      gender,
+      name,
+      dateOfBirth,
+      occupation,
+      entries,
+    })
+  );
+  return nonSensitivePatients;
 };
 
 export const addPatient = (entry: newPatient | undefined): Patient | null => {
