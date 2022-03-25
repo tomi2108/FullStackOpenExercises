@@ -32,7 +32,6 @@
   },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "project": "tsconfig.json",
-    "tsconfigRootDir": "client"
+    "project": "./tsconfig.json"
   }
 }

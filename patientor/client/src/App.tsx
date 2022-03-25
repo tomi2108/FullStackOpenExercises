@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Link, Route, Routes } from "react-router-dom";
 import PatientDetails from "./components/PatientDetails";
 import { apiBaseUrl } from "./constants";
 import PatientListPage from "./PatientListPage";
-import { useStateValue } from "./state";
+import { setPatientList, useStateValue } from "./state";
 import { Patient } from "./types";
 
 const App = () => {
@@ -18,7 +18,7 @@ const App = () => {
         const { data: patientListFromApi } = await axios.get<Patient[]>(
           `${apiBaseUrl}/patients`
         );
-        dispatch({ type: "SET_PATIENT_LIST", payload: patientListFromApi });
+        dispatch(setPatientList(patientListFromApi));
       } catch (e) {
         console.error(e);
       }

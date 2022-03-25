@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect } from "react";
 import { useMatch } from "react-router-dom";
 import { apiBaseUrl } from "../constants";
-import { useStateValue } from "../state";
+import { setPatientForDetails, useStateValue } from "../state";
 import { Patient } from "../types";
 
 const PatientDetails = () => {
@@ -13,10 +13,10 @@ const PatientDetails = () => {
     const fetchPatientList = async () => {
       if (typeof match?.params.id === "undefined") return;
       try {
-        const { data: Patient } = await axios.get<Patient>(
+        const { data: patient } = await axios.get<Patient>(
           `${apiBaseUrl}/patients/${match.params.id}`
         );
-        dispatch({ type: "SET_PATIENT", payload: Patient });
+        dispatch(setPatientForDetails(patient));
       } catch (e) {
         console.error(e);
       }
