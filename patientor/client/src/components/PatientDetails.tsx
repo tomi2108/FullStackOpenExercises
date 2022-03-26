@@ -64,15 +64,17 @@ const PatientDetails = () => {
     }
     if (newEntry.type === EntryTypes.Hospital) {
       newEntry.discharge = {
-        date: values.discharge.date,
-        criteria: values.discharge.criteria,
+        date: values.dischargeDate,
+        criteria: values.dischargeCriteria,
       };
+      console.log(newEntry);
     }
+    console.log(newEntry);
     if (newEntry.type === EntryTypes.OccupationalHealthcare) {
       newEntry.employerName = values.employerName;
       newEntry.sickLeave = {
-        startDate: values.sickLeave.startDate,
-        endDate: values.sickLeave.endDate,
+        startDate: values.startDate,
+        endDate: values.endDate,
       };
     }
     try {

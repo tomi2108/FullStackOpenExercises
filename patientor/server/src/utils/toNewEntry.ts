@@ -66,6 +66,7 @@ const isHealtCheckRating = (param: any): param is HealthCheckRating => {
 };
 
 const parseDischarge = (discharge: unknown): Discharge => {
+  console.log(discharge);
   if (isDischarge(discharge)) return discharge;
   throw new Error("incorrect or missing discharge");
 };
@@ -110,6 +111,7 @@ export const toNewEntry = ({
     return healthEntry;
   }
   if (parseType(type) === "Hospital") {
+    console.log(discharge);
     const hospitalEntry: HospitalEntry = {
       ...newEntry,
       type: parseType(type) as "Hospital",

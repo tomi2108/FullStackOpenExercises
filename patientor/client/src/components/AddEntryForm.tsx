@@ -15,9 +15,11 @@ export type EntryFormValues = {
   date: string;
   specialist: string;
   healthCheckRating: HealthCheckRating;
-  discharge: { date: string; criteria: string };
+  dischargeDate: string;
+  dischargeCriteria: string;
   employerName: string;
-  sickLeave: { startDate: string; endDate: string };
+  startDate: string;
+  endDate: string;
 };
 
 const entryTypeOptions: typeOptions[] = [
@@ -58,9 +60,11 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
         date: "",
         specialist: "",
         healthCheckRating: HealthCheckRating.Healthy,
-        discharge: { date: "", criteria: "" },
+        dischargeDate: "",
+        dischargeCriteria: "",
+        startDate: "",
+        endDate: "",
         employerName: "",
-        sickLeave: { startDate: "", endDate: "" },
       }}
       onSubmit={onSubmit}
     >
