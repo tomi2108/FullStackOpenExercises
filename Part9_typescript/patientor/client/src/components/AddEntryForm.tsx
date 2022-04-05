@@ -10,7 +10,6 @@ import {
 
 export type EntryFormValues = {
   type: EntryTypes;
-  id: string;
   description: string;
   date: string;
   specialist: string;
@@ -25,7 +24,10 @@ export type EntryFormValues = {
 const entryTypeOptions: typeOptions[] = [
   { value: EntryTypes.HealthCheck, label: "Health check" },
   { value: EntryTypes.Hospital, label: "Hospital" },
-  { value: EntryTypes.OccupationalHealthcare, label: "OccupationalHealthcare" },
+  {
+    value: EntryTypes.OccupationalHealthcare,
+    label: "Occupational healthcare",
+  },
 ];
 
 const healthOptions: healthCheckRatingOptions[] = [
@@ -55,7 +57,6 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
     <Formik
       initialValues={{
         type: EntryTypes.HealthCheck,
-        id: "",
         description: "",
         date: "",
         specialist: "",
@@ -72,12 +73,6 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
         return (
           <Form className="form ui">
             <SelectField label="Type" name="type" options={entryTypeOptions} />
-            <Field
-              label="id"
-              placeholder="id"
-              name="id"
-              component={TextField}
-            />
             <Field
               label="Description"
               placeholder="description"
@@ -120,13 +115,13 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
                   component={TextField}
                 />
                 <Field
-                  label="Start date"
+                  label="Sick leave Start date"
                   placeholder="start date"
                   name="startDate"
                   component={TextField}
                 />
                 <Field
-                  label="End date"
+                  label="Sick leave End date"
                   placeholder="end date"
                   name="endDate"
                   component={TextField}

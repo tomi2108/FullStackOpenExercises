@@ -22,8 +22,7 @@ const PatientDetails = () => {
 
   const closeModal = (): void => {
     setModalOpen(false);
-    setError;
-    undefined;
+    setError("");
   };
 
   const [{ patientForDetails, diagnoses, patients }, dispatch] =
@@ -54,7 +53,6 @@ const PatientDetails = () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const newEntry: any = {
       type: type,
-      id: values.id,
       description: values.description,
       date: values.date,
       specialist: values.specialist,
@@ -67,9 +65,7 @@ const PatientDetails = () => {
         date: values.dischargeDate,
         criteria: values.dischargeCriteria,
       };
-      console.log(newEntry);
     }
-    console.log(newEntry);
     if (newEntry.type === EntryTypes.OccupationalHealthcare) {
       newEntry.employerName = values.employerName;
       newEntry.sickLeave = {
@@ -88,6 +84,7 @@ const PatientDetails = () => {
         p.id === patientForDetails.id ? newPatient : p
       );
       dispatch(setPatientList(updatedPatients));
+      dispatch(setPatientForDetails(newPatient));
       closeModal();
     } catch (e: unknown) {
       if (axios.isAxiosError(e)) {

@@ -1,3 +1,4 @@
+import { v1 as uuid } from "uuid";
 import {
   Discharge,
   Entry,
@@ -27,7 +28,6 @@ const isDate = (date: string): boolean => {
 };
 
 type Fields = {
-  id: unknown;
   description: unknown;
   date: unknown;
   specialist: unknown;
@@ -66,7 +66,6 @@ const isHealtCheckRating = (param: any): param is HealthCheckRating => {
 };
 
 const parseDischarge = (discharge: unknown): Discharge => {
-  console.log(discharge);
   if (isDischarge(discharge)) return discharge;
   throw new Error("incorrect or missing discharge");
 };
@@ -86,7 +85,6 @@ const isSickLeave = (param: any): param is SickLeave => {
 };
 
 export const toNewEntry = ({
-  id,
   description,
   date,
   specialist,
@@ -97,7 +95,7 @@ export const toNewEntry = ({
   sickLeave,
 }: Fields): Entry | undefined => {
   const newEntry = {
-    id: parseToString(id, "id"),
+    id: uuid(),
     description: parseToString(description, "description"),
     date: parseDate(date),
     specialist: parseToString(specialist, "specialist"),
@@ -111,7 +109,6 @@ export const toNewEntry = ({
     return healthEntry;
   }
   if (parseType(type) === "Hospital") {
-    console.log(discharge);
     const hospitalEntry: HospitalEntry = {
       ...newEntry,
       type: parseType(type) as "Hospital",
