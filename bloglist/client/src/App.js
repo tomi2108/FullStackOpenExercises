@@ -24,7 +24,9 @@ const App = () => {
     }
   }, [user, dispatch]);
 
-  return <Container>{!user ? <LoginPage /> : <BlogsPage user={user} />}</Container>;
+  return (
+    <Container>{!user ? <LoginPage /> : <BlogsPage user={user} />}</Container>
+  );
 };
 
 export default App;
